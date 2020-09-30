@@ -1,0 +1,22 @@
+<resources>
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <!--这是对话框-->
+    <style name="mydialog" parent="@android:style/Theme.Dialog">
+        <!-- 对话框出现时背景是否变暗 -->
+        <item name="android:backgroundDimEnabled">true</item>
+        <!-- 对话框背景(重要) -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:buttonStyle">@style/Widget.AppCompat.Button.Borderless</item>
+    </style>
+    <style name="popup_animation" mce_bogus="1" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/push_buttom_in</item>
+        <item name="android:windowExitAnimation">@anim/popup_bottom_out</item>
+    </style>
+</resources>
