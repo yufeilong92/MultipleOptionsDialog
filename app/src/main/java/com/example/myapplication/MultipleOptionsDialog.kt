@@ -27,11 +27,11 @@ import kotlinx.android.synthetic.main.dialog_multiple_options.*
  * @param mIsFilter 是否筛选多选，false 原数据 true返回选中数据
  */
 abstract class MultipleOptionsDialog(
-    var mContext: Context,//上下文
-    var mData: MutableList<MultipleOptionAdapter.SelectRlv>?,//通用工具类
-    var mSelectType: SelectType?,//选择类型 Single 单选 multiple 多选
-    var mIsGravityButtom: Boolean,//视图位置 是否在底部 false 居中
-    var mIsFilter: Boolean//是否筛选多选，false 原数据 true返回选中数据
+    var mContext: Context,
+    var mData: MutableList<MultipleOptionAdapter.SelectRlv>?,
+    var mSelectType: SelectType?,
+    var mIsGravityButtom: Boolean,
+    var mIsFilter: Boolean
 ) :
 AlertDialog(mContext, R.style.mydialog) {
 
