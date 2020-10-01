@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         clearData()
-        val dialog = object : MultipleOptionsDialog(this, mArray!!,SelectType.MULTIPLE,true) {
+        val dialog = object : MultipleOptionsDialog(this, mArray!!,SelectType.MULTIPLE,true,true) {
             override fun onSelectMutableListData(mdata: MutableList<MultipleOptionAdapter.SelectRlv>?) {
              Toast.makeText(this@MainActivity, "${mdata.toString()}", Toast.LENGTH_SHORT).show();
             }

@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.Gravity
 import android.view.WindowManager
+import android.widget.Button
 import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.android.synthetic.main.dialog_multiple_options.*
 
@@ -21,6 +22,7 @@ abstract class MultipleOptionsDialog(
     var mContext: Context,
     var mData: MutableList<MultipleOptionAdapter.SelectRlv>?,
     var mSelectType: SelectType?,
+    var mIsGravityButtom: Boolean,
     var mIsFilter: Boolean
 ) :
     AlertDialog(mContext, R.style.mydialog) {
@@ -124,7 +126,11 @@ abstract class MultipleOptionsDialog(
         params.width = metrics.widthPixels
         params.height = WindowManager.LayoutParams.WRAP_CONTENT
         window!!.attributes = params
-        window!!.setGravity(Gravity.CENTER)
+        if (mIsGravityButtom) {
+            window!!.setGravity(Gravity.BOTTOM)
+        } else {
+            window?.setGravity(Gravity.CENTER)
+        }
     }
 
     fun refreshData(data: MutableList<MultipleOptionAdapter.SelectRlv>?) {
