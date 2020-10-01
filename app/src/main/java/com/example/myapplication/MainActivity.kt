@@ -2,6 +2,7 @@ package com.example.myapplication
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -10,10 +11,13 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         clearData()
-        val dialog = object : MultipleOptionsDialog(this, mArray!!) {
+        val dialog = object : MultipleOptionsDialog(this, mArray!!,SelectType.MULTIPLE) {
             override fun onSelectMutableListData(mdata: MutableList<MultipleOptionAdapter.SelectRlv>?) {
+             Toast.makeText(this@MainActivity, "${mdata.toString()}", Toast.LENGTH_SHORT).show();
+            }
 
-
+            override fun onSelectSingleData(mdata: MultipleOptionAdapter.SelectRlv?) {
+                Toast.makeText(this@MainActivity, "${mdata.toString()}", Toast.LENGTH_SHORT).show();
             }
         }
         tv_hello.setOnClickListener {

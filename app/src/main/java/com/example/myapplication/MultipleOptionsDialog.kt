@@ -17,7 +17,12 @@ import kotlinx.android.synthetic.main.dialog_multiple_options.*
  * @Time :2020/9/30 17:42
  * @Purpose :通用多选对话框
  */
-abstract class MultipleOptionsDialog(var mContext: Context, var mData: MutableList<MultipleOptionAdapter.SelectRlv>?) :
+abstract class MultipleOptionsDialog(
+    var mContext: Context,
+    var mData: MutableList<MultipleOptionAdapter.SelectRlv>?,
+    var mSelectType: SelectType?,
+    var mIsFilter: Boolean
+) :
     AlertDialog(mContext, R.style.mydialog) {
 
     private var metrics: DisplayMetrics = context.resources.displayMetrics
@@ -28,7 +33,7 @@ abstract class MultipleOptionsDialog(var mContext: Context, var mData: MutableLi
     }
 
 
-    private var mAdapter:MultipleOptionAdapter?=null
+    private var mAdapter: MultipleOptionAdapter? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setSizeMode()
@@ -42,7 +47,33 @@ abstract class MultipleOptionsDialog(var mContext: Context, var mData: MutableLi
             dismiss()
         }
         btn_dialog_multiple_right.setOnClickListener {
-            onSelectMutableListData(mData)
+            when (mSelectType) {
+                SelectType.MULTIPLE -> {
+                    if (mData.isNullOrEmpty()) {
+                        onSelectMutableListData(null)
+                        return@setOnClickListener
+                    }
+                    if (mIsFilter) {
+                        val filter = mData?.filter { it.check } as MutableList
+                        onSelectMutableListData(filter)
+                        return@setOnClickListener
+                    }
+                    onSelectMutableListData(mData)
+                }
+                else -> {
+                    if (mData.isNullOrEmpty()) {
+                        onSelectSingleData(null)
+                        return@setOnClickListener
+                    }
+                    val list = mData?.filter { it.check }
+                    if (list.isNullOrEmpty()) {
+                        onSelectSingleData(null)
+                        return@setOnClickListener
+                    }
+                    onSelectSingleData(list[0])
+
+                }
+            }
         }
     }
 
@@ -54,13 +85,39 @@ abstract class MultipleOptionsDialog(var mContext: Context, var mData: MutableLi
         rlv_dialog_multiple_content.adapter = mAdapter
         mAdapter?.setRecyclerListener(object : MultipleOptionAdapter.RecyclerItemListener {
             override fun itemClickListener(position: Int) {
-                mData!![position].check = !mData!![position].check
-                mAdapter?.notifyItemChanged(position)
+                when (mSelectType) {
+                    SelectType.SINGLE -> {
+                        clearSelect()
+                        mData!![position].check = !mData!![position].check
+                        mAdapter?.notifyDataSetChanged()
+                    }
+                    SelectType.MULTIPLE -> {
+                        mData!![position].check = !mData!![position].check
+                        mAdapter?.notifyItemChanged(position)
+                    }
+                    else -> {
+                        clearSelect()
+                        mData!![position].check = !mData!![position].check
+                        mAdapter?.notifyDataSetChanged()
+                    }
+                }
             }
         })
     }
 
+    private fun clearSelect() {
+        if (mData.isNullOrEmpty()) {
+            return
+        }
+        mData?.let {
+            for (child in it) {
+                child.check = false
+            }
+        }
+    }
+
     abstract fun onSelectMutableListData(mdata: MutableList<MultipleOptionAdapter.SelectRlv>?)
+    abstract fun onSelectSingleData(mdata: MultipleOptionAdapter.SelectRlv?)
 
     private fun setSizeMode() {
         val params = window!!.attributes
@@ -71,8 +128,11 @@ abstract class MultipleOptionsDialog(var mContext: Context, var mData: MutableLi
     }
 
     fun refreshData(data: MutableList<MultipleOptionAdapter.SelectRlv>?) {
-        mData=data
+        mData = data
         mAdapter?.notifyDataSetChanged()
+    }
 
+    enum class SelectType {
+        SINGLE, MULTIPLE
     }
 }

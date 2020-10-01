@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView
 class MultipleOptionAdapter(var mContext: Context, var mData: MutableList<SelectRlv>) :
     RecyclerView.Adapter<MultipleOptionAdapter.ViewHodle>() {
 
+
+
     interface RecyclerItemListener {
         fun itemClickListener(position: Int)
     }
@@ -52,9 +54,14 @@ class MultipleOptionAdapter(var mContext: Context, var mData: MutableList<Select
     override fun getItemCount(): Int {
         return mData.size
     }
-    data   class SelectRlv(
+    data  class SelectRlv(
         var name: String = "",
         var id: String = "",
         var check: Boolean
-    )
+    ) {
+        override fun toString(): String {
+            return "SelectRlv(name='$name', id='$id', check=$check)"
+        }
+    }
+
 }
