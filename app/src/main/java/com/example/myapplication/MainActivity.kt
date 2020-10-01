@@ -40,7 +40,10 @@ class MainActivity : AppCompatActivity() {
             mArray!!.clear()
         }
     }
-
+     /***
+      * @param list 数据
+      * @return
+      */
     private fun addData(list: MutableList<MultipleOptionAdapter.SelectRlv>?) {
         if (list == null || list.isEmpty()) {
             return
