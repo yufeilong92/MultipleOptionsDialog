@@ -18,8 +18,20 @@ import androidx.recyclerview.widget.RecyclerView
  */
 class MultipleOptionAdapter(var mContext: Context, var mData: MutableList<SelectRlv>) :
     RecyclerView.Adapter<MultipleOptionAdapter.ViewHodle>() {
+    //选择图片
+    private var mSelectIcon: Int = R.mipmap.ic_gm_select_s
 
+    //没有选中图片
+    private var mNoSelectIcon: Int = R.mipmap.ic_gm_select_n
 
+    //是否显示图片
+    private var mShowIcon: Boolean = true
+
+    private var mSelectColor: Int = Color.RED
+
+    private var mNoSelectColor: Int = Color.BLACK
+
+    private var mTextGravity: Int = -1
 
     interface RecyclerItemListener {
         fun itemClickListener(position: Int)
@@ -43,18 +55,45 @@ class MultipleOptionAdapter(var mContext: Context, var mData: MutableList<Select
 
     override fun onBindViewHolder(holder: ViewHodle, position: Int) {
         val selectRlv = mData[position]
-        holder.mIv.setImageResource(if (selectRlv.check) R.mipmap.ic_gm_select_s else R.mipmap.ic_gm_select_n)
+        if (mShowIcon) {
+            holder.mIv.setImageResource(if (selectRlv.check) mSelectIcon else mNoSelectIcon)
+        } else {
+            holder.mIv.visibility = View.GONE
+        }
+        if (mTextGravity != -1) {
+            holder.mTv.gravity = mTextGravity
+        }
         holder.mTv.setText(selectRlv.name)
-        holder.mTv.setTextColor((if (selectRlv.check) Color.GREEN else Color.BLACK))
+        holder.mTv.setTextColor((if (selectRlv.check) mSelectColor else mNoSelectColor))
         holder.view.setOnClickListener {
             listener?.itemClickListener(position)
         }
     }
 
+    fun setSelectIcom(noSelect: Int, select: Int) {
+        mSelectIcon = select
+        mNoSelectIcon = noSelect
+    }
+
+    fun setShowIcon(show: Boolean) {
+        mShowIcon = show
+    }
+
+    fun setSelectColor(noSelect: Int, select: Int) {
+        mSelectColor = select
+        mNoSelectColor = noSelect
+    }
+
     override fun getItemCount(): Int {
         return mData.size
     }
-    data  class SelectRlv(
+
+    fun setTextGravity(gravity: Int) {
+        mTextGravity = gravity
+
+    }
+
+    data class SelectRlv(
         var name: String = "",
         var id: String = "",
         var check: Boolean

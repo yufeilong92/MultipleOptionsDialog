@@ -8,6 +8,8 @@ import android.util.DisplayMetrics
 import android.view.Gravity
 import android.view.WindowManager
 import android.widget.Button
+import androidx.annotation.ColorInt
+import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.GridLayoutManager
 import kotlinx.android.synthetic.main.dialog_multiple_options.*
 
@@ -32,18 +34,19 @@ abstract class MultipleOptionsDialog(
     var mSelectType: SelectType?,
     var mIsGravityButtom: Boolean,
     var mIsFilter: Boolean
-) :
-AlertDialog(mContext, R.style.mydialog) {
+) : AlertDialog(mContext, R.style.mydialog) {
+
 
     private var metrics: DisplayMetrics = context.resources.displayMetrics
-
 
     init {
         window!!.setWindowAnimations(R.style.popup_animation)
     }
 
-
+    //适配器
     private var mAdapter: MultipleOptionAdapter? = null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setSizeMode()
@@ -113,6 +116,32 @@ AlertDialog(mContext, R.style.mydialog) {
                 }
             }
         })
+    }
+
+    /***
+     * @param noSelect 不选择图片id
+     * @param select 选中的图片id
+     */
+    fun setSelectIcon(@DrawableRes noSelect: Int, @DrawableRes select: Int) {
+       mAdapter?.let {
+           it.setSelectIcom(noSelect, select)
+       }
+    }
+
+    fun showIcon(show: Boolean) {
+        mAdapter?.let {
+            it.setShowIcon(show)
+        }
+    }
+
+    fun setSelectColor(@ColorInt noSelect: Int, @ColorInt select: Int) {
+        mAdapter?.let {
+            it.setSelectColor(noSelect, select)
+        }
+
+    }
+    fun onNotiftyData(){
+        mAdapter?.notifyDataSetChanged()
     }
 
     private fun clearSelect() {

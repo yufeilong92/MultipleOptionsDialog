@@ -14,4 +14,14 @@ class ExampleUnitTest {
     fun addition_isCorrect() {
         assertEquals(4, 2 + 2)
     }
+
+    @Test
+    fun text(){
+        val mA = A
+            .builde()
+            .setJob("It")
+            .setName("it")
+            .create()
+        println(mA.show())
+    }
 }

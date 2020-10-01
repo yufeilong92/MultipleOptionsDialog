@@ -11,10 +11,8 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rlv_dialog_multiple_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="200dp"
+        android:layout_height="300dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/btn_dialog_multiple_life"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
