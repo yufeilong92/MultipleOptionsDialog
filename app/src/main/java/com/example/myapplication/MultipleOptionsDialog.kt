@@ -18,6 +18,14 @@ import kotlinx.android.synthetic.main.dialog_multiple_options.*
  * @Time :2020/9/30 17:42
  * @Purpose :通用多选对话框
  */
+
+/***
+ * @param mContext  上下文
+ * @param mData  通用工具类
+ * @param mSelectType  选择类型 Single 单选 multiple 多选
+ * @param mIsGravityButtom  视图位置 是否在底部 false 居中
+ * @param mIsFilter 是否筛选多选，false 原数据 true返回选中数据
+ */
 abstract class MultipleOptionsDialog(
     var mContext: Context,
     var mData: MutableList<MultipleOptionAdapter.SelectRlv>?,
