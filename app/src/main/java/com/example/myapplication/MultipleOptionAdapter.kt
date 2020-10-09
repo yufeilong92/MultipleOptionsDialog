@@ -93,14 +93,6 @@ class MultipleOptionAdapter(var mContext: Context, var mData: MutableList<Select
 
     }
 
-    data class SelectRlv(
-        var name: String = "",
-        var id: String = "",
-        var check: Boolean
-    ) {
-        override fun toString(): String {
-            return "SelectRlv(name='$name', id='$id', check=$check)"
-        }
-    }
+
 
 }

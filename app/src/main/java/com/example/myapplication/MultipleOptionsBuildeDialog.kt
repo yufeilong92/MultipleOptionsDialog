@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.backpacker.yflLibrary.view.dialog
 
 
 import android.app.AlertDialog
@@ -11,7 +11,9 @@ import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.Nullable
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.myapplication.MultipleOptionsBuildeDialog.SelectType.*
+import com.example.myapplication.MultipleOptionAdapter
+import com.example.myapplication.R
+import com.example.myapplication.SelectRlv
 import kotlinx.android.synthetic.main.dialog_multiple_options.*
 
 /**
@@ -32,7 +34,7 @@ import kotlinx.android.synthetic.main.dialog_multiple_options.*
 class MultipleOptionsBuildeDialog(
     var mContext: Context
 ) : AlertDialog(mContext, R.style.mydialog) {
-    private lateinit var mData: MutableList<MultipleOptionAdapter.SelectRlv>
+    private lateinit var mData: MutableList<SelectRlv>
     private lateinit var mSelectType: SelectType
     private var mIsGravityButtom: Boolean = false
     private var mIsFilter: Boolean = false
@@ -43,8 +45,8 @@ class MultipleOptionsBuildeDialog(
     private var mNoSelectColor: Int = 0
     private var mTvGravity: Int = -1
 
-    private lateinit var onMultipeDataListener: (data: MutableList<MultipleOptionAdapter.SelectRlv>?) -> Unit
-    private lateinit var onSingleDataListener: (data: MultipleOptionAdapter.SelectRlv?) -> Unit
+    private lateinit var onMultipeDataListener: (data: MutableList<SelectRlv>?) -> Unit
+    private lateinit var onSingleDataListener: (data: SelectRlv?) -> Unit
 
     private var metrics: DisplayMetrics = context.resources.displayMetrics
 
@@ -61,57 +63,105 @@ class MultipleOptionsBuildeDialog(
 
     class MultipleBuidle(cm: Context) {
         var mMultipleOptionsDialog = MultipleOptionsBuildeDialog(mContext = cm)
-        fun setData(@Nullable data: MutableList<MultipleOptionAdapter.SelectRlv>): MultipleBuidle {
+
+        /***
+         * @param data  通用数据
+         * @return
+         */
+        fun setData(@Nullable data: MutableList<SelectRlv>): MultipleBuidle {
             mMultipleOptionsDialog.mData = data
             return this
         }
 
+        /***
+         * @param select 选择类型  SINGLE（单选）, MULTIPLE（多选）
+         * @return
+         */
         fun setSelectType(select: SelectType): MultipleBuidle {
             mMultipleOptionsDialog.mSelectType = select
             return this
         }
 
+        /***
+         * @param isGravity 对话框是否居中
+         * @return
+         */
         fun setGravityButtom(isGravity: Boolean): MultipleBuidle {
             mMultipleOptionsDialog.mIsGravityButtom = isGravity
             return this
         }
 
+        /***
+         * @param isFilter 是否过滤选中数据
+         * @return
+         */
         fun setIsFilter(isFilter: Boolean): MultipleBuidle {
             mMultipleOptionsDialog.mIsFilter = isFilter
             return this
         }
 
+        /***
+         * @param show 是否显示选中图标
+         * @return
+         */
         fun setShowIcon(show: Boolean): MultipleBuidle {
             mMultipleOptionsDialog.mIsShow = show
             return this
         }
 
+        /***
+         * @param select 选中图标
+         * @param noSelect 未选中图标
+         * @return
+         */
         fun setSelectIcon(@DrawableRes select: Int, @DrawableRes noSelect: Int): MultipleBuidle {
             mMultipleOptionsDialog.mSelectIcon = select
             mMultipleOptionsDialog.mNoSelectIcon = noSelect
             return this
         }
 
-        fun setTvGravity(gravity: Int):MultipleBuidle{
-            mMultipleOptionsDialog.mTvGravity=gravity
+        /***
+         * @param gravity item 字体位置
+         * @return
+         */
+        fun setTvGravity(gravity: Int): MultipleBuidle {
+            mMultipleOptionsDialog.mTvGravity = gravity
             return this
         }
+
+        /***
+         * @param select 选中颜色
+         * @param noSelect 未选中颜色
+         * @return
+         */
         fun setSelectColor(@ColorInt select: Int, @ColorInt noSelect: Int): MultipleBuidle {
             mMultipleOptionsDialog.mSelectColor = select
             mMultipleOptionsDialog.mNoSelectColor = noSelect
             return this
         }
 
-        fun setSingleDataListener(data: (data: MultipleOptionAdapter.SelectRlv?) -> Unit): MultipleBuidle {
+        /***
+         * @param data 单选结果回调
+         * @return
+         */
+        fun setSingleDataListener(data: (data: SelectRlv?) -> Unit): MultipleBuidle {
             mMultipleOptionsDialog.onSingleDataListener = data
             return this
         }
 
-        fun setMultipleDataListener(data: (data: MutableList<MultipleOptionAdapter.SelectRlv>?) -> Unit): MultipleBuidle {
+        /***
+         * @param data 多选结果回调
+         * @return
+         */
+        fun setMultipleDataListener(data: (data: MutableList<SelectRlv>?) -> Unit): MultipleBuidle {
             mMultipleOptionsDialog.onMultipeDataListener = data
             return this
         }
 
+        /***
+         * 显示
+         * @return
+         */
         fun show() {
             mMultipleOptionsDialog.show()
         }
@@ -138,7 +188,7 @@ class MultipleOptionsBuildeDialog(
         }
         btn_dialog_multiple_right.setOnClickListener {
             when (mSelectType) {
-                MULTIPLE -> {
+                SelectType.MULTIPLE -> {
                     if (mData.isNullOrEmpty()) {
                         if (::onMultipeDataListener.isInitialized) {
                             onMultipeDataListener.invoke(null)
@@ -190,17 +240,17 @@ class MultipleOptionsBuildeDialog(
         if (mNoSelectIcon != 0 && mSelectIcon != 0)
             mAdapter?.setSelectIcom(mNoSelectIcon, mSelectIcon)
         mAdapter?.setShowIcon(mIsShow)
-        if (mTvGravity!=-1)
+        if (mTvGravity != -1)
             mAdapter?.setTextGravity(mTvGravity)
         mAdapter?.setRecyclerListener(object : MultipleOptionAdapter.RecyclerItemListener {
             override fun itemClickListener(position: Int) {
                 when (mSelectType) {
-                    SINGLE -> {
+                    SelectType.SINGLE -> {
                         clearSelect()
                         mData[position].check = !mData[position].check
                         mAdapter?.notifyDataSetChanged()
                     }
-                    MULTIPLE -> {
+                    SelectType.MULTIPLE -> {
                         mData[position].check = !mData[position].check
                         mAdapter?.notifyItemChanged(position)
                     }
@@ -243,4 +293,5 @@ class MultipleOptionsBuildeDialog(
     enum class SelectType {
         SINGLE, MULTIPLE
     }
+
 }
