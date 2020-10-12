@@ -297,20 +297,21 @@ class MultipleOptionsBuildeDialog(
             lp.setMargins(0, 0, 0, 0)
             rootview.layoutParams = lp
             window!!.setGravity(Gravity.BOTTOM)
-            showTopButtom(true, false)
+            showTopButtom(true, false,true)
         } else {
             lp.setMargins(30, 0, 30, 0)
             rootview.layoutParams = lp
             window?.setGravity(Gravity.CENTER)
-            showTopButtom(false, true)
+            showTopButtom(false, true,false)
         }
     }
 
-    private fun showTopButtom(showTop: Boolean, buttom: Boolean) {
+    private fun showTopButtom(showTop: Boolean, buttom: Boolean,line:Boolean) {
         tv_dialog_multiple_cancle.visibility = if (showTop) View.VISIBLE else View.GONE
         tv_dialog_multiple_sure.visibility = if (showTop) View.VISIBLE else View.GONE
         btn_dialog_multiple_life.visibility = if ( buttom) View.VISIBLE else View.GONE
         btn_dialog_multiple_right.visibility = if ( buttom) View.VISIBLE else View.GONE
+        view_line_one.visibility = if ( buttom) View.VISIBLE else View.GONE
 
     }
 
