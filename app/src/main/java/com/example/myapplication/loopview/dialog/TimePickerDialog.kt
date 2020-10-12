@@ -7,13 +7,13 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.Gravity
 import android.view.WindowManager
-import android.widget.FrameLayout
+import androidx.annotation.ColorInt
 import androidx.appcompat.app.AlertDialog
 import com.example.myapplication.R
 import com.example.myapplication.loopview.loopviewInface.LoopView
 import com.example.myapplication.loopview.loopviewInface.OnItemScrollListener
-import kotlinx.android.synthetic.main.dialog_multiple_options.*
 import kotlinx.android.synthetic.main.dialog_time_picker.*
+import java.lang.NumberFormatException
 import java.util.ArrayList
 
 /**
@@ -23,12 +23,15 @@ import java.util.ArrayList
  * @Time :2020/10/12 16:09
  * @Purpose :对话框
  */
-class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.mydialog) {
+public class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.mydialog) {
     private var metrics: DisplayMetrics = context.resources.displayMetrics
 
     init {
         window!!.setWindowAnimations(R.style.popup_animation)
     }
+
+    public lateinit var onSelectTImePickerNoHourMin: (year: String, month: String, day: String) -> Unit
+    public lateinit var onSelectTImePickerHourMin: (year: String, month: String, day: String, hour: String, min: String) -> Unit
 
     private var mYearList: MutableList<String>? = null
     private var mMonthList: MutableList<String>? = null
@@ -38,6 +41,126 @@ class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.my
 
     //是否显示时分
     private var isShowHourMin = false
+
+    //中间文字颜色
+    private var mContentColor: Int = 0
+
+    //其他颜色
+    private var mOutContentColor: Int = 0
+
+    //线颜色
+    private var mLineColor: Int = 0
+
+    //是否显示线
+    private var isShowLine: Boolean = true
+
+    //是否循环
+    private var isLoop: Boolean = true
+
+    //开始时间
+    private var mStartYear: Int = 0
+
+    //结束时间
+    private var mEndYear: Int = 0
+
+    //百分比
+    private var mPercentage: Double = 0.40
+
+    //是否联动
+    private var mIsLinkAge: Boolean = false
+
+
+    private var mSelectYear: Int = 0
+    private var mSelectMonth: Int = 0
+    private var mSelectDay: Int = 0
+    private var mSelectHour: Int = 0
+    private var mSelectMin: Int = 0
+
+    companion object {
+        fun buidler(mContext: Context): Builder {
+            return Builder(mContext)
+        }
+    }
+
+    class Builder(var mContext: Context) {
+        val timePicker = TimePickerDialog(mContext)
+
+        fun setStartTime(year: Int): Builder {
+            timePicker.mStartYear = year
+            return this
+        }
+
+        fun setEndTime(year: Int): Builder {
+            timePicker.mEndYear = year
+            return this
+        }
+
+        fun setSelectTime(year: Int, month: Int, day: Int, hour: Int, min: Int): Builder {
+            timePicker.mSelectYear = year
+            timePicker.mSelectMonth = month
+            timePicker.mSelectDay = day
+            timePicker.mSelectHour = hour
+            timePicker.mSelectMin = min
+            return this
+        }
+
+        fun setSelectTime(year: Int, month: Int, day: Int): Builder {
+            timePicker.mSelectYear = year
+            timePicker.mSelectMonth = month
+            timePicker.mSelectDay = day
+            timePicker.mSelectHour = 0
+            timePicker.mSelectMin = 0
+            timePicker.isShowHourMin = false
+            return this
+        }
+
+
+        fun setIsShowHourMin(show: Boolean): Builder {
+            timePicker.isShowHourMin = show
+            return this
+        }
+
+        fun setSelectContentColor(@ColorInt color: Int): Builder {
+            timePicker.mContentColor = color
+            return this
+        }
+
+        fun setSelectOutColor(@ColorInt color: Int): Builder {
+            timePicker.mOutContentColor = color
+            return this
+        }
+
+        fun setLineColor(@ColorInt color: Int): Builder {
+            timePicker.mLineColor = color
+            return this
+        }
+
+        fun showLine(show: Boolean): Builder {
+            timePicker.isShowLine = show
+            return this
+        }
+
+        fun setViewPhoneHeightPercentage(mPercentage: Double): Builder {
+            timePicker.mPercentage = mPercentage
+            return this
+        }
+
+        fun setIsLoop(isLoop: Boolean): Builder {
+            timePicker.isLoop = isLoop
+            return this
+        }
+
+        fun isLinkage(isLinkage: Boolean): Builder {
+            timePicker.mIsLinkAge = isLinkage
+            return this
+        }
+
+
+        fun show() {
+            timePicker.show()
+        }
+
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +178,56 @@ class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.my
         setDay()
         setHOur()
         setMIn()
+        setContentColor()
+        setOutContentColor()
+        setLineColor()
+        setShowline()
+        setIsLoop()
     }
+
+    private fun setContentColor() {
+        if (mContentColor == 0) return
+        loop_year.setCenterTextColor(mContentColor)
+        loop_month.setCenterTextColor(mContentColor)
+        loop_day.setCenterTextColor(mContentColor)
+        loop_hour.setCenterTextColor(mContentColor)
+        loop_min.setCenterTextColor(mContentColor)
+    }
+
+    private fun setOutContentColor() {
+        if (mOutContentColor == 0) return
+        loop_year.setOuterTextColor(mOutContentColor)
+        loop_month.setOuterTextColor(mOutContentColor)
+        loop_day.setOuterTextColor(mOutContentColor)
+        loop_hour.setOuterTextColor(mOutContentColor)
+        loop_min.setOuterTextColor(mOutContentColor)
+    }
+
+    private fun setShowline() {
+        loop_year.setShowDividerLine(isShowLine)
+        loop_month.setShowDividerLine(isShowLine)
+        loop_day.setShowDividerLine(isShowLine)
+        loop_hour.setShowDividerLine(isShowLine)
+        loop_min.setShowDividerLine(isShowLine)
+    }
+
+    private fun setLineColor() {
+        if (mLineColor == 0) return
+        loop_year.setDividerColor(mContentColor)
+        loop_month.setDividerColor(mContentColor)
+        loop_day.setDividerColor(mContentColor)
+        loop_hour.setDividerColor(mContentColor)
+        loop_min.setDividerColor(mContentColor)
+    }
+
+    private fun setIsLoop() {
+        loop_year.setLoop(isLoop)
+        loop_month.setLoop(isLoop)
+        loop_day.setLoop(isLoop)
+        loop_hour.setLoop(isLoop)
+        loop_min.setLoop(isLoop)
+    }
+
 
     private fun initListener() {
         tv_dialog_time_picker_cancle.setOnClickListener {
@@ -67,11 +239,65 @@ class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.my
     }
 
     private fun sure() {
+        val selectedItem = loop_year.selectedItem
+        val selectedItem1 = loop_month.selectedItem
+        val selectedItem2 = loop_day.selectedItem
+        if (isShowHourMin) {
+            if (mYearList.isNullOrEmpty() || mMonthList.isNullOrEmpty() || mDayList.isNullOrEmpty() || mHourList.isNullOrEmpty() || mMinuteList.isNullOrEmpty())
+                return
+            val selectedItem3 = loop_hour.selectedItem
+            val selectedItem4 = loop_min.selectedItem
+            if (::onSelectTImePickerHourMin.isInitialized) {
+
+                onSelectTImePickerHourMin(
+                    mYearList!![selectedItem],
+                    mMonthList!![selectedItem1],
+                    mDayList!![selectedItem2],
+                    mHourList!![selectedItem3],
+                    mMinuteList!![selectedItem4]
+                )
+                dismiss()
+            }
+
+        } else {
+            if (mYearList.isNullOrEmpty() || mMonthList.isNullOrEmpty() || mDayList.isNullOrEmpty())
+                return
+            if (::onSelectTImePickerNoHourMin.isInitialized) {
+                onSelectTImePickerNoHourMin(
+                    mYearList!![selectedItem],
+                    mMonthList!![selectedItem1],
+                    mDayList!![selectedItem2]
+                )
+                dismiss()
+            }
+        }
 
 
     }
 
+
     private fun initViewModel() {
+
+    }
+
+    private fun gmSetViewData(type:Int,loopView:LoopView,start:Int,end:Int){
+        when(type){
+            0->{//年
+
+            }
+            1->{//月
+
+            }
+            2->{//日
+
+            }
+            3->{//时
+
+            }
+            4->{//分
+
+            }
+        }
 
     }
 
@@ -80,7 +306,10 @@ class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.my
             mYearList = ArrayList<String>()
         else
             mYearList?.clear()
-        for (i in 1992..2020) {
+        if (mStartYear > mEndYear) {
+            throw NumberFormatException("开始时间$mStartYear 大于 结束$mEndYear")
+        }
+        for (i in mStartYear..mEndYear) {
             mYearList?.add("$i")
         }
         loop_year.setItems(mYearList)
@@ -93,9 +322,14 @@ class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.my
                 scrollState: Int,
                 totalScrollY: Int
             ) {
+
                 if (scrollState == LoopView.SCROLL_STATE_IDLE) {
                     bindViewData()
+                }else{
+
+
                 }
+
             }
 
             override fun onItemScrolling(
@@ -118,14 +352,14 @@ class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.my
                 return
             val selectedItem3 = loop_hour.selectedItem
             val selectedItem4 = loop_min.selectedItem
-            tv_dialog_time_picker_time.text =  "${mYearList!![selectedItem]}-${mMonthList!![selectedItem1]}-${mDayList!![selectedItem2]}  ${mHourList!![selectedItem3]}:${mMinuteList!![selectedItem4]}"
+            tv_dialog_time_picker_time.text =
+                "${mYearList!![selectedItem]}-${mMonthList!![selectedItem1]}-${mDayList!![selectedItem2]}  ${mHourList!![selectedItem3]}:${mMinuteList!![selectedItem4]}"
 
         } else {
             if (mYearList.isNullOrEmpty() || mMonthList.isNullOrEmpty() || mDayList.isNullOrEmpty())
                 return
-            tv_dialog_time_picker_time.text =  "${mYearList!![selectedItem]}-${mMonthList!![selectedItem1]}-${mDayList!![selectedItem2]}"
-
-
+            tv_dialog_time_picker_time.text =
+                "${mYearList!![selectedItem]}-${mMonthList!![selectedItem1]}-${mDayList!![selectedItem2]}"
         }
     }
 
@@ -135,6 +369,7 @@ class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.my
             mMonthList = ArrayList<String>()
         } else
             mMonthList?.clear()
+
         for (i in 1..12) {
             mMonthList?.add("$i")
         }
@@ -149,7 +384,7 @@ class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.my
                 totalScrollY: Int
             ) {
                 if (scrollState == LoopView.SCROLL_STATE_IDLE) {
-//                    bindViewData()
+                    bindViewData()
                 }
             }
 
@@ -183,7 +418,7 @@ class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.my
                 totalScrollY: Int
             ) {
                 if (scrollState == LoopView.SCROLL_STATE_IDLE) {
-//                    bindViewData()
+                    bindViewData()
                 }
             }
 
@@ -219,7 +454,7 @@ class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.my
                 totalScrollY: Int
             ) {
                 if (scrollState == LoopView.SCROLL_STATE_IDLE) {
-//                    bindViewData()
+                    bindViewData()
                 }
             }
 
@@ -253,7 +488,7 @@ class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.my
                 totalScrollY: Int
             ) {
                 if (scrollState == LoopView.SCROLL_STATE_IDLE) {
-//                    bindViewData()
+                    bindViewData()
                 }
             }
 
@@ -286,7 +521,9 @@ class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.my
         }
 
         val layoutParams = rootviewtimepicek.layoutParams
-        layoutParams.height = (height * 0.4).toInt()
+        layoutParams.height = (height * mPercentage).toInt()
         rootviewtimepicek.layoutParams = layoutParams
     }
+
+
 }
