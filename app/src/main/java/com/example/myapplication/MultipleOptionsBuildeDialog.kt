@@ -300,7 +300,7 @@ class MultipleOptionsBuildeDialog(
             rootview.layoutParams = lp
             window!!.setGravity(Gravity.BOTTOM)
         } else {
-            lp.setMargins(16, 0, 16, 0)
+            lp.setMargins(30, 0, 30, 0)
             rootview.layoutParams = lp
             window?.setGravity(Gravity.CENTER)
         }

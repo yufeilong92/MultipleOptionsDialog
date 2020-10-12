@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity() {
             addData(data)
             MultipleOptionsBuildeDialog.builde(this@MainActivity)
                 .setData(mArray!!)
-                .setGravityButtom(true)
+                .setGravityButtom(false)
                 .setIsFilter(false)
                 .setSelectColor(R.mipmap.ic_gm_select_s,R.mipmap.ic_gm_select_n)
                 .setSelectColor(Color.RED,Color.GRAY)
