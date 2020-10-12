@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.Gravity
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.backpacker.yflLibrary.view.dialog.MultipleOptionsBuildeDialog
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -35,7 +34,7 @@ class MainActivity : AppCompatActivity() {
             addData(data)
             MultipleOptionsBuildeDialog.builde(this@MainActivity)
                 .setData(mArray!!)
-                .setGravityButtom(false)
+                .setGravityButtom(true)
                 .setIsFilter(false)
                 .setSelectColor(R.mipmap.ic_gm_select_s,R.mipmap.ic_gm_select_n)
                 .setSelectColor(Color.RED,Color.GRAY)

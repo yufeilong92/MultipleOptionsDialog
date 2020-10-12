@@ -1,4 +1,4 @@
-package com.backpacker.yflLibrary.view.dialog
+package com.example.myapplication
 
 
 import android.app.AlertDialog
@@ -6,15 +6,13 @@ import android.content.Context
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.Gravity
+import android.view.View
 import android.view.WindowManager
 import android.widget.FrameLayout
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.Nullable
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.myapplication.MultipleOptionAdapter
-import com.example.myapplication.R
-import com.example.myapplication.SelectRlv
 import kotlinx.android.synthetic.main.dialog_multiple_options.*
 
 /**
@@ -184,48 +182,58 @@ class MultipleOptionsBuildeDialog(
 
 
     private fun initListener() {
+        tv_dialog_multiple_cancle.setOnClickListener {
+            dismiss()
+        }
         btn_dialog_multiple_life.setOnClickListener {
             dismiss()
         }
+        tv_dialog_multiple_sure.setOnClickListener {
+            sureItem()
+        }
         btn_dialog_multiple_right.setOnClickListener {
-            when (mSelectType) {
-                SelectType.MULTIPLE -> {
-                    if (mData.isNullOrEmpty()) {
-                        if (::onMultipeDataListener.isInitialized) {
-                            onMultipeDataListener.invoke(null)
-                        }
-                        return@setOnClickListener
-                    }
-                    if (mIsFilter) {
-                        val filter = mData?.filter { it.check } as MutableList
-                        if (::onMultipeDataListener.isInitialized) {
-                            onMultipeDataListener.invoke(filter)
-                        }
-                        return@setOnClickListener
-                    }
-                    if (::onMultipeDataListener.isInitialized) {
-                        onMultipeDataListener.invoke(mData)
-                    }
-                }
-                else -> {
-                    if (mData.isNullOrEmpty()) {
-                        if (::onSingleDataListener.isInitialized) {
-                            onSingleDataListener.invoke(null)
-                        }
-                        return@setOnClickListener
-                    }
-                    val list = mData.filter { it.check }
-                    if (list.isNullOrEmpty()) {
-                        if (::onSingleDataListener.isInitialized) {
-                            onSingleDataListener.invoke(null)
-                        }
-                        return@setOnClickListener
-                    }
-                    if (::onSingleDataListener.isInitialized) {
-                        onSingleDataListener.invoke(list[0])
-                    }
+            sureItem()
+        }
+    }
 
+    private fun sureItem() {
+        when (mSelectType) {
+            SelectType.MULTIPLE -> {
+                if (mData.isNullOrEmpty()) {
+                    if (::onMultipeDataListener.isInitialized) {
+                        onMultipeDataListener.invoke(null)
+                    }
+                    return
                 }
+                if (mIsFilter) {
+                    val filter = mData?.filter { it.check } as MutableList
+                    if (::onMultipeDataListener.isInitialized) {
+                        onMultipeDataListener.invoke(filter)
+                    }
+                    return
+                }
+                if (::onMultipeDataListener.isInitialized) {
+                    onMultipeDataListener.invoke(mData)
+                }
+            }
+            else -> {
+                if (mData.isNullOrEmpty()) {
+                    if (::onSingleDataListener.isInitialized) {
+                        onSingleDataListener.invoke(null)
+                    }
+                    return
+                }
+                val list = mData.filter { it.check }
+                if (list.isNullOrEmpty()) {
+                    if (::onSingleDataListener.isInitialized) {
+                        onSingleDataListener.invoke(null)
+                    }
+                    return
+                }
+                if (::onSingleDataListener.isInitialized) {
+                    onSingleDataListener.invoke(list[0])
+                }
+
             }
         }
     }
@@ -263,17 +271,7 @@ class MultipleOptionsBuildeDialog(
                 }
             }
         })
-        if (!mData.isNullOrEmpty()) {
-            var first = 0
-            for ((index, child) in mData.withIndex()) {
-                if (child.check) {
-                    first = index
-                    break
-                }
-            }
-            if (first != 0)
-                rlv_dialog_multiple_content.scrollToPosition(first)
-        }
+
     }
 
 
@@ -299,16 +297,27 @@ class MultipleOptionsBuildeDialog(
             lp.setMargins(0, 0, 0, 0)
             rootview.layoutParams = lp
             window!!.setGravity(Gravity.BOTTOM)
+            showTopButtom(true, false)
         } else {
             lp.setMargins(30, 0, 30, 0)
             rootview.layoutParams = lp
             window?.setGravity(Gravity.CENTER)
+            showTopButtom(false, true)
         }
+    }
+
+    private fun showTopButtom(showTop: Boolean, buttom: Boolean) {
+        tv_dialog_multiple_cancle.visibility = if (showTop) View.VISIBLE else View.GONE
+        tv_dialog_multiple_sure.visibility = if (showTop) View.VISIBLE else View.GONE
+        btn_dialog_multiple_life.visibility = if ( buttom) View.VISIBLE else View.GONE
+        btn_dialog_multiple_right.visibility = if ( buttom) View.VISIBLE else View.GONE
+
     }
 
 
     enum class SelectType {
         SINGLE, MULTIPLE
     }
+
 
 }
