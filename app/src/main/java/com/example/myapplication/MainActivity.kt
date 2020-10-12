@@ -13,7 +13,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         clearData()
-        val dialog = object :MultipleOptionsDialog(this, mArray!!, SelectType.MULTIPLE, true, true) {
+        val dialog =
+            object : MultipleOptionsDialog(this, mArray!!, SelectType.MULTIPLE, true, true) {
                 override fun onSelectMutableListData(mdata: MutableList<SelectRlv>?) {
                     Toast.makeText(this@MainActivity, "${mdata.toString()}", Toast.LENGTH_SHORT)
                         .show();
@@ -27,7 +28,12 @@ class MainActivity : AppCompatActivity() {
         tv_hello.setOnClickListener {
             val data = mutableListOf<SelectRlv>()
             for (index in 0..50) {
-                val vo = SelectRlv("标题$index", "$index", false)
+                var vo: SelectRlv
+                if (index == 30) {
+                     vo = SelectRlv("标题$index", "$index", true)
+                } else {
+                    vo = SelectRlv("标题$index", "$index", false)
+                }
                 data.add(vo)
             }
             clearData()
@@ -36,8 +42,8 @@ class MainActivity : AppCompatActivity() {
                 .setData(mArray!!)
                 .setGravityButtom(true)
                 .setIsFilter(false)
-                .setSelectColor(R.mipmap.ic_gm_select_s,R.mipmap.ic_gm_select_n)
-                .setSelectColor(Color.RED,Color.GRAY)
+                .setSelectColor(R.mipmap.ic_gm_select_s, R.mipmap.ic_gm_select_n)
+                .setSelectColor(Color.RED, Color.GRAY)
                 .setSelectType(MultipleOptionsBuildeDialog.SelectType.SINGLE)
                 .setShowIcon(false)
                 .setTvGravity(Gravity.CENTER)

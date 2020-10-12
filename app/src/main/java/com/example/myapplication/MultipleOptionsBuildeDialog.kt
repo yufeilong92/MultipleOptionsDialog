@@ -4,6 +4,7 @@ package com.example.myapplication
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.util.DisplayMetrics
 import android.view.Gravity
 import android.view.View
@@ -272,6 +273,21 @@ class MultipleOptionsBuildeDialog(
             }
         })
 
+        if (!mData.isNullOrEmpty()) {
+            var first = 0
+            for ((index, child) in mData.withIndex()) {
+                if (child.check) {
+                    first = index
+                    break
+                }
+            }
+            if (first != 0) {
+                Handler().postDelayed({
+                    rlv_dialog_multiple_content.scrollToPosition(first)
+                }, 300)
+            }
+
+        }
     }
 
 
@@ -297,21 +313,21 @@ class MultipleOptionsBuildeDialog(
             lp.setMargins(0, 0, 0, 0)
             rootview.layoutParams = lp
             window!!.setGravity(Gravity.BOTTOM)
-            showTopButtom(true, false,true)
+            showTopButtom(true, false, true)
         } else {
             lp.setMargins(30, 0, 30, 0)
             rootview.layoutParams = lp
             window?.setGravity(Gravity.CENTER)
-            showTopButtom(false, true,false)
+            showTopButtom(false, true, false)
         }
     }
 
-    private fun showTopButtom(showTop: Boolean, buttom: Boolean,line:Boolean) {
+    private fun showTopButtom(showTop: Boolean, buttom: Boolean, line: Boolean) {
         tv_dialog_multiple_cancle.visibility = if (showTop) View.VISIBLE else View.GONE
         tv_dialog_multiple_sure.visibility = if (showTop) View.VISIBLE else View.GONE
-        btn_dialog_multiple_life.visibility = if ( buttom) View.VISIBLE else View.GONE
-        btn_dialog_multiple_right.visibility = if ( buttom) View.VISIBLE else View.GONE
-        view_line_one.visibility = if ( buttom) View.VISIBLE else View.GONE
+        btn_dialog_multiple_life.visibility = if (buttom) View.VISIBLE else View.GONE
+        btn_dialog_multiple_right.visibility = if (buttom) View.VISIBLE else View.GONE
+        view_line_one.visibility = if (line) View.VISIBLE else View.GONE
 
     }
 
