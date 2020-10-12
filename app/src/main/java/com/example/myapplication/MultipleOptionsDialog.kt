@@ -30,7 +30,7 @@ import kotlinx.android.synthetic.main.dialog_multiple_options.*
  */
 abstract class MultipleOptionsDialog(
     var mContext: Context,
-    var mData: MutableList<MultipleOptionAdapter.SelectRlv>?,
+    var mData: MutableList<SelectRlv>?,
     var mSelectType: SelectType?,
     var mIsGravityButtom: Boolean,
     var mIsFilter: Boolean
@@ -155,8 +155,8 @@ abstract class MultipleOptionsDialog(
         }
     }
 
-    abstract fun onSelectMutableListData(mdata: MutableList<MultipleOptionAdapter.SelectRlv>?)
-    abstract fun onSelectSingleData(mdata: MultipleOptionAdapter.SelectRlv?)
+    abstract fun onSelectMutableListData(mdata: MutableList<SelectRlv>?)
+    abstract fun onSelectSingleData(mdata: SelectRlv?)
 
     private fun setSizeMode() {
         val params = window!!.attributes
@@ -170,7 +170,7 @@ abstract class MultipleOptionsDialog(
         }
     }
 
-    fun refreshData(data: MutableList<MultipleOptionAdapter.SelectRlv>?) {
+    fun refreshData(data: MutableList<SelectRlv>?) {
         mData = data
         mAdapter?.notifyDataSetChanged()
     }

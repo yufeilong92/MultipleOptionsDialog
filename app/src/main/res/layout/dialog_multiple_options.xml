@@ -4,7 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:maxHeight="400dp"
-    android:layout_margin="16dp"
+    android:id="@+id/rootview"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
     android:background="@drawable/gm_4_white"
     android:padding="16dp">
 

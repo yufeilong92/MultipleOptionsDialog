@@ -5,37 +5,37 @@ import android.os.Bundle
 import android.view.Gravity
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.backpacker.yflLibrary.view.dialog.MultipleOptionsBuildeDialog
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
-    private var mArray: MutableList<MultipleOptionAdapter.SelectRlv>? = null
+    private var mArray: MutableList<SelectRlv>? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         clearData()
-        val dialog =
-            object : MultipleOptionsDialog(this, mArray!!, SelectType.MULTIPLE, true, true) {
-                override fun onSelectMutableListData(mdata: MutableList<MultipleOptionAdapter.SelectRlv>?) {
+        val dialog = object :MultipleOptionsDialog(this, mArray!!, SelectType.MULTIPLE, true, true) {
+                override fun onSelectMutableListData(mdata: MutableList<SelectRlv>?) {
                     Toast.makeText(this@MainActivity, "${mdata.toString()}", Toast.LENGTH_SHORT)
                         .show();
                 }
 
-                override fun onSelectSingleData(mdata: MultipleOptionAdapter.SelectRlv?) {
+                override fun onSelectSingleData(mdata: SelectRlv?) {
                     Toast.makeText(this@MainActivity, "${mdata.toString()}", Toast.LENGTH_SHORT)
                         .show();
                 }
             }
         tv_hello.setOnClickListener {
-            val data = mutableListOf<MultipleOptionAdapter.SelectRlv>()
+            val data = mutableListOf<SelectRlv>()
             for (index in 0..50) {
-                val vo = MultipleOptionAdapter.SelectRlv("标题$index", "$index", false)
+                val vo = SelectRlv("标题$index", "$index", false)
                 data.add(vo)
             }
             clearData()
             addData(data)
             MultipleOptionsBuildeDialog.builde(this@MainActivity)
                 .setData(mArray!!)
-                .setGravityButtom(false)
+                .setGravityButtom(true)
                 .setIsFilter(false)
                 .setSelectColor(R.mipmap.ic_gm_select_s,R.mipmap.ic_gm_select_n)
                 .setSelectColor(Color.RED,Color.GRAY)
@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() {
      * @param list 数据
      * @return
      */
-    private fun addData(list: MutableList<MultipleOptionAdapter.SelectRlv>?) {
+    private fun addData(list: MutableList<SelectRlv>?) {
         if (list == null || list.isEmpty()) {
             return
         }

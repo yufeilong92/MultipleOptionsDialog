@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.Gravity
 import android.view.WindowManager
+import android.widget.FrameLayout
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.Nullable
@@ -175,8 +176,8 @@ class MultipleOptionsBuildeDialog(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setSizeMode()
         setContentView(R.layout.dialog_multiple_options)
+        setSizeMode()
         initView()
         initListener()
     }
@@ -262,6 +263,17 @@ class MultipleOptionsBuildeDialog(
                 }
             }
         })
+        if (!mData.isNullOrEmpty()) {
+            var first = 0
+            for ((index, child) in mData.withIndex()) {
+                if (child.check) {
+                    first = index
+                    break
+                }
+            }
+            if (first != 0)
+                rlv_dialog_multiple_content.scrollToPosition(first)
+        }
     }
 
 
@@ -282,9 +294,14 @@ class MultipleOptionsBuildeDialog(
         params.width = metrics.widthPixels
         params.height = WindowManager.LayoutParams.WRAP_CONTENT
         window!!.attributes = params
+        val lp = rootview.layoutParams as FrameLayout.LayoutParams
         if (mIsGravityButtom) {
+            lp.setMargins(0, 0, 0, 0)
+            rootview.layoutParams = lp
             window!!.setGravity(Gravity.BOTTOM)
         } else {
+            lp.setMargins(16, 0, 16, 0)
+            rootview.layoutParams = lp
             window?.setGravity(Gravity.CENTER)
         }
     }
