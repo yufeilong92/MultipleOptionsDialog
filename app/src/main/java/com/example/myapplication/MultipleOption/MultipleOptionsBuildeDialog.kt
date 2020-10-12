@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.MultipleOption
 
 
 import android.app.AlertDialog
@@ -16,7 +16,7 @@ import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.annotation.Nullable
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.myapplication.R
 import kotlinx.android.synthetic.main.dialog_multiple_options.*
 
 /**

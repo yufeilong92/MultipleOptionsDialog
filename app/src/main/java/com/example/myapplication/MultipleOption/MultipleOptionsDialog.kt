@@ -1,4 +1,4 @@
-package com.example.myapplication
+package com.example.myapplication.MultipleOption
 
 
 import android.app.AlertDialog
@@ -7,10 +7,10 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.Gravity
 import android.view.WindowManager
-import android.widget.Button
 import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.myapplication.R
 import kotlinx.android.synthetic.main.dialog_multiple_options.*
 
 /**
