@@ -66,9 +66,6 @@ class MainActivity2 : AppCompatActivity() {
                     .setInitData(list)
                     .setSelectItem(com)
                     .setIsLoop(false)
-                    .showLine(true)
-                    .setLineColor(Color.BLUE)
-                    .setSelectContentColor(Color.BLUE)
                     .setOnRadioPickerListener { postion, item ->
                         com = item
                     }
