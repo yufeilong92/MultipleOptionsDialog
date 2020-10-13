@@ -374,6 +374,7 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
                 val selectedItem = loop_h_hour.selectedItem
                 val com = mHourList!![selectedItem]
                 if (com != mLinkageHour) {
+                    mLinkageHour=com
                     setCustiomPostion(0, true)
                 }
             }

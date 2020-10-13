@@ -577,6 +577,7 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
                 val selectedItem = loop_year.selectedItem
                 val com = mYearList!![selectedItem]
                 if (com != mLinkageYear) {
+                    mLinkageYear=com
                     setCustiomPostion(0, true, 0, true, 0, true, 0, true)
                 }
             }
@@ -584,6 +585,7 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
                 val selectedItem = loop_month.selectedItem
                 val com = mMonthList!![selectedItem]
                 if (com != mLinkageMonth) {
+                    mLinkageMonth=com
                     setCustiomPostion(0, false, 0, true, 0, true, 0, true)
                 }
 
@@ -592,6 +594,7 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
                 val selectedItem = loop_day.selectedItem
                 val com = mDayList!![selectedItem]
                 if (com != mLinkageDay) {
+                    mLinkageDay=com
                     setCustiomPostion(0, false, 0, false, 0, true, 0, true)
                 }
             }
@@ -599,6 +602,7 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
                 val selectedItem = loop_hour.selectedItem
                 val com = mHourList!![selectedItem]
                 if (com != mLinkageHour) {
+                    mLinkageHour=com
                     setCustiomPostion(0, false, 0, false, 0, false, 0, true)
                 }
             }
