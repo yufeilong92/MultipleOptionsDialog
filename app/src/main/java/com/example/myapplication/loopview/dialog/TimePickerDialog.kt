@@ -78,6 +78,9 @@ public class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.s
     //单位大小
     private var mLablerSize: Float = 13.0f
 
+    //显示数量
+    private var mNumber: Int = 0
+
     //回现数据
     private var mSelectYear: Int = 0
     private var mSelectMonth: Int = 0
@@ -186,7 +189,12 @@ public class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.s
         }
 
         fun setOnTimePickerListener(onSelectTImePickerHourMin: (year: String, month: String, day: String, hour: String, min: String) -> Unit): Builder {
-            timePicker.onSelectTImePickerHourMin=onSelectTImePickerHourMin
+            timePicker.onSelectTImePickerHourMin = onSelectTImePickerHourMin
+            return this
+        }
+
+        fun setShowNumber(number: Int): Builder {
+            timePicker.mNumber = number
             return this
         }
 
@@ -206,11 +214,7 @@ public class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.s
 
     private fun initEvent() {
         tv_dialog_time_picker_time.text = "请选择"
-//        setYear()
-//        setMonth()
-//        setDay()
-//        setHOur()
-//        setMIn()
+        setLoopNumber()
         gmSetViewData(0, loop_year, mSelectYear)
         gmSetViewData(1, loop_month, mSelectMonth)
         gmSetViewData(2, loop_day, mSelectDay)
@@ -246,6 +250,7 @@ public class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.s
         tv_dialog_time_picker_year.setTextColor(mLaberColor)
         tv_dialog_time_picker_month.setTextColor(mLaberColor)
         tv_dialog_time_picker_day.setTextColor(mLaberColor)
+        if (!isShowHourMin) return
         tv_dialog_time_picker_hour.setTextColor(mLaberColor)
         tv_dialog_time_picker_min.setTextColor(mLaberColor)
     }
@@ -254,8 +259,19 @@ public class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.s
         tv_dialog_time_picker_year.textSize = mLablerSize
         tv_dialog_time_picker_month.textSize = mLablerSize
         tv_dialog_time_picker_day.textSize = mLablerSize
+        if (!isShowHourMin) return
         tv_dialog_time_picker_hour.textSize = mLablerSize
         tv_dialog_time_picker_min.textSize = mLablerSize
+    }
+
+    private fun setLoopNumber() {
+        if (mNumber == 0) return
+        loop_year.setItemsVisibleCount(mNumber)
+        loop_month.setItemsVisibleCount(mNumber)
+        loop_day.setItemsVisibleCount(mNumber)
+        if (!isShowHourMin) return
+        loop_hour.setItemsVisibleCount(mNumber)
+        loop_min.setItemsVisibleCount(mNumber)
     }
 
     private fun initLinkAge() {
