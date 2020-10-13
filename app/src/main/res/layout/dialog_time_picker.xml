@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/rootviewtimepicek"
+    android:id="@+id/rootviewtimepicek_h"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="#ffffff"
@@ -55,13 +55,17 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:orientation="horizontal">
-
+       <View
+           android:layout_width="wrap_content"
+           android:layout_weight="1"
+           android:layout_height="wrap_content"/>
         <com.example.myapplication.loopview.loopviewInface.LoopView
             android:id="@+id/loop_h_hour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             app:awv_centerTextColor="#1E90FF"
+            app:awv_dividerTextColor="#DCDCDC"
             app:awv_isLoop="false"
             app:awv_textsize="13" />
 
@@ -79,6 +83,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             app:awv_centerTextColor="#1E90FF"
+            app:awv_dividerTextColor="#DCDCDC"
             app:awv_isLoop="false"
             app:awv_textsize="13" />
 
@@ -89,6 +94,10 @@
             android:layout_gravity="center"
             android:text="分"
             android:textSize="13sp" />
+        <View
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
 </LinearLayout>

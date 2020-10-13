@@ -17,7 +17,6 @@ import com.example.myapplication.loopview.loopviewInface.LoopView
 import com.example.myapplication.loopview.loopviewInface.OnItemScrollListener
 import kotlinx.android.synthetic.main.dialog_date_time_picker.*
 
-import kotlinx.android.synthetic.main.dialog_time_picker.rootviewtimepicek
 import java.lang.NumberFormatException
 import java.util.ArrayList
 
@@ -355,12 +354,12 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
 
     private fun setLineColor() {
         if (mLineColor == 0) return
-        loop_year.setDividerColor(mContentColor)
-        loop_month.setDividerColor(mContentColor)
-        loop_day.setDividerColor(mContentColor)
+        loop_year.setDividerColor(mLineColor)
+        loop_month.setDividerColor(mLineColor)
+        loop_day.setDividerColor(mLineColor)
         if (!isShowHourMin) return
-        loop_hour.setDividerColor(mContentColor)
-        loop_min.setDividerColor(mContentColor)
+        loop_hour.setDividerColor(mLineColor)
+        loop_min.setDividerColor(mLineColor)
     }
 
     private fun setIsLoop() {

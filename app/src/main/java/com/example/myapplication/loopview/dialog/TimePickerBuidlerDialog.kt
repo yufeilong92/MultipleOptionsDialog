@@ -1,9 +1,13 @@
 package com.example.myapplication.loopview.dialog
 
 import android.content.Context
+import android.graphics.Point
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.view.Gravity
+import android.view.WindowManager
 import androidx.annotation.ColorInt
 import androidx.appcompat.app.AlertDialog
 import com.example.myapplication.R
@@ -29,8 +33,8 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
     }
 
     companion object {
-        fun buidler(mContext: Context): DateTimePickerDialog.Builder {
-            return DateTimePickerDialog.Builder(mContext)
+        fun buidler(mContext: Context): Builder {
+            return Builder(mContext)
         }
     }
 
@@ -62,10 +66,8 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
 
     //线颜色
     private var mLineColor: Int = 0
-
     //是否显示线
     private var isShowLine: Boolean = true
-
     //是否循环
     private var isLoop: Boolean = true
 
@@ -102,11 +104,6 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
             return this
         }
 
-        fun showLine(show: Boolean): Builder {
-            timePicker.isShowLine = show
-            return this
-        }
-
         fun setLablerSize(size: Float): Builder {
             timePicker.mLablerSize = size
             return this
@@ -136,7 +133,10 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
             timePicker.onSelectTImePickerNoHourMin = onSelectTImePickerHourMin
             return this
         }
-
+        fun showLine(show: Boolean): Builder {
+            timePicker.isShowLine = show
+            return this
+        }
         fun setShowNumber(number: Int): Builder {
             timePicker.mNumber = number
             return this
@@ -151,15 +151,19 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_time_picker)
+        setSizeMode()
         initEvent()
         initListener()
 
     }
 
     private fun initEvent() {
+        tv_dialog_time_picker_h_time.text = "请选择"
+        setLoopNumber()
         gmSetViewData(3, loop_h_hour, mSelectHour)
         gmSetViewData(4, loop_h_min, mSelectMin)
         setTvTypeface()
+
         setContentColor()
         setOutContentColor()
         setLineColor()
@@ -169,7 +173,15 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
         setIsLoop()
         initLinkAge()
     }
-
+    private fun setShowline() {
+        loop_h_hour.setShowDividerLine(isShowLine)
+        loop_h_min.setShowDividerLine(isShowLine)
+    }
+    private fun setLoopNumber() {
+        if (mNumber == 0) return
+        loop_h_hour.setItemsVisibleCount(mNumber)
+        loop_h_min.setItemsVisibleCount(mNumber)
+    }
     private fun setTvTypeface() {
         mOutContentTvTypeface?.let {
 
@@ -209,18 +221,10 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
         loop_h_hour.setOuterTextColor(mOutContentColor)
         loop_h_min.setOuterTextColor(mOutContentColor)
     }
-
-    private fun setShowline() {
-
-        loop_h_hour.setShowDividerLine(isShowLine)
-        loop_h_min.setShowDividerLine(isShowLine)
-    }
-
     private fun setLineColor() {
         if (mLineColor == 0) return
-
-        loop_h_hour.setDividerColor(mContentColor)
-        loop_h_min.setDividerColor(mContentColor)
+        loop_h_hour.setDividerColor(mLineColor)
+        loop_h_min.setDividerColor(mLineColor)
     }
 
     private fun setIsLoop() {
@@ -251,8 +255,8 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
     private fun sure() {
         if (mHourList.isNullOrEmpty() || mMinuteList.isNullOrEmpty())
             return
-        val selectedItem3 = loop_hour.selectedItem
-        val selectedItem4 = loop_min.selectedItem
+        val selectedItem3 = loop_h_hour.selectedItem
+        val selectedItem4 = loop_h_min.selectedItem
         if (::onSelectTImePickerNoHourMin.isInitialized) {
             onSelectTImePickerNoHourMin(
                     mHourList!![selectedItem3],
@@ -260,8 +264,6 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
             )
             dismiss()
         }
-
-
     }
 
     /***
@@ -283,11 +285,11 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
                     mHourList?.clear()
                 }
                 for (i in 0..23) {
-                    mHourList?.add("$i")
+                    mHourList?.add("${fillZero(i)}")
                 }
                 if (!mHourList.isNullOrEmpty()) {
                     for ((index, child) in mHourList!!.withIndex()) {
-                        if (child == "$select") {
+                        if (child == "${fillZero(select)}") {
                             postion = index
                             break
                         }
@@ -302,11 +304,11 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
                 } else
                     mMinuteList?.clear()
                 for (i in 0..59) {
-                    mMinuteList?.add("$i")
+                    mMinuteList?.add("${fillZero(i)}")
                 }
                 if (!mMinuteList.isNullOrEmpty()) {
                     for ((index, child) in mMinuteList!!.withIndex()) {
-                        if (child == "$select") {
+                        if (child == "${fillZero(select)}") {
                             postion = index
                             break
                         }
@@ -347,10 +349,10 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
     private fun bindViewData() {
         if (mHourList.isNullOrEmpty() || mMinuteList.isNullOrEmpty())
             return
-        val selectedItem3 = loop_hour.selectedItem
-        val selectedItem4 = loop_min.selectedItem
+        val selectedItem3 = loop_h_hour.selectedItem
+        val selectedItem4 = loop_h_min.selectedItem
         tv_dialog_time_picker_h_time.text =
-                "$${mHourList!![selectedItem3]}:${mMinuteList!![selectedItem4]}"
+                "${mHourList!![selectedItem3]}:${mMinuteList!![selectedItem4]}"
     }
 
     /***
@@ -389,5 +391,30 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
             loop_h_min.setCurrentPosition(min)
     }
 
+
+    private fun setSizeMode() {
+        val params = window!!.attributes
+        params.width = metrics.widthPixels
+        params.height = WindowManager.LayoutParams.WRAP_CONTENT
+        window!!.attributes = params
+        window!!.setGravity(Gravity.BOTTOM)
+        val windowManager = mContext.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val defaultDisplay = windowManager.defaultDisplay
+        var height: Int
+        if (Build.VERSION.SDK_INT < 17) {
+            height = defaultDisplay.height
+        } else {
+            val size = Point()
+            defaultDisplay.getRealSize(size)
+            height = size.y
+        }
+
+        val layoutParams = rootviewtimepicek_h.layoutParams
+        layoutParams.height = (height * mPercentage).toInt()
+        rootviewtimepicek_h.layoutParams = layoutParams
+    }
+    private fun fillZero(number: Int): String {
+        return if (number < 10) "0$number" else "" + number
+    }
 
 }
