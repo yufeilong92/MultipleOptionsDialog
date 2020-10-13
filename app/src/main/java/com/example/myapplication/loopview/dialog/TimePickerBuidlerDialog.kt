@@ -137,6 +137,15 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
             timePicker.isShowLine = show
             return this
         }
+        fun setOutTvTypeface(type: Typeface): Builder {
+            timePicker.mOutContentTvTypeface = type
+            return this
+        }
+
+        fun setContentTvTypeface(type: Typeface): Builder {
+            timePicker.mContentTvTypeface = type
+            return this
+        }
         fun setShowNumber(number: Int): Builder {
             timePicker.mNumber = number
             return this
