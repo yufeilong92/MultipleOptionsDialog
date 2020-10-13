@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.example.myapplication.loopview.dialog.DateTimePickerDialog
+import com.example.myapplication.loopview.dialog.RadioPickerDialog
 import com.example.myapplication.loopview.dialog.TimePickerBuidlerDialog
 import kotlinx.android.synthetic.main.activity_main2.*
 import java.util.*
@@ -49,6 +50,27 @@ class MainActivity2 : AppCompatActivity() {
                     .setSelectTime(hour, min)
                     .setOnTimePickerListener { h, m ->
                         Toast.makeText(this, "$h:$m", Toast.LENGTH_SHORT).show();
+                    }
+                    .show()
+
+        }
+        var com = "10"
+        btn_raido.setOnClickListener {
+
+            val list = mutableListOf<String>()
+
+            for (index in 0..40) {
+                list.add("$index")
+            }
+            RadioPickerDialog.buidler(this)
+                    .setInitData(list)
+                    .setSelectItem(com)
+                    .setIsLoop(false)
+                    .showLine(true)
+                    .setLineColor(Color.BLUE)
+                    .setSelectContentColor(Color.BLUE)
+                    .setOnRadioPickerListener { postion, item ->
+                        com = item
                     }
                     .show()
 

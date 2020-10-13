@@ -24,4 +24,12 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
          />
+    <Button
+        android:layout_width="wrap_content"
+        android:id="@+id/btn_raido"
+        android:text="radio_time"
+        app:layout_constraintTop_toBottomOf="@id/btn_time"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_height="wrap_content"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
