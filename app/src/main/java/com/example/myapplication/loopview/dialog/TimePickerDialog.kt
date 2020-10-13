@@ -2,6 +2,7 @@ package com.example.myapplication.loopview.dialog
 
 import android.content.Context
 import android.graphics.Point
+import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -76,10 +77,14 @@ public class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.s
     private var mLaberColor: Int = 0
 
     //单位大小
-    private var mLablerSize: Float = 13.0f
+    private var mLablerSize: Float = 0.0f
 
     //显示数量
     private var mNumber: Int = 0
+
+    private var mContentTvTypeface: Typeface? = null
+
+    private var mOutContentTvTypeface: Typeface? = null
 
     //回现数据
     private var mSelectYear: Int = 0
@@ -197,6 +202,15 @@ public class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.s
             timePicker.mNumber = number
             return this
         }
+        fun setOutTvTypeface(type: Typeface): Builder {
+            timePicker.mOutContentTvTypeface = type
+            return this
+        }
+
+        fun setContentTvTypeface(type: Typeface): Builder {
+            timePicker.mContentTvTypeface = type
+            return this
+        }
 
         fun show() {
             timePicker.show()
@@ -226,7 +240,7 @@ public class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.s
         setLoopViewShow(loop_min, isShowHourMin)
         setTvShow(tv_dialog_time_picker_hour, isShowHourMin)
         setTvShow(tv_dialog_time_picker_min, isShowHourMin)
-
+        setTvTypeface()
         setContentColor()
         setOutContentColor()
         setLineColor()
@@ -237,6 +251,26 @@ public class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.s
         initLinkAge()
     }
 
+    private fun setTvTypeface() {
+        mOutContentTvTypeface?.let {
+            loop_year.setOutContentTypeface(it)
+            loop_month.setOutContentTypeface(it)
+            loop_day.setOutContentTypeface(it)
+            if (!isShowHourMin) return
+            loop_hour.setOutContentTypeface(it)
+            loop_min.setOutContentTypeface(it)
+        }
+
+        mContentTvTypeface?.let {
+            loop_year.setOutContentTypeface(it)
+            loop_month.setOutContentTypeface(it)
+            loop_day.setOutContentTypeface(it)
+            if (!isShowHourMin) return
+            loop_hour.setOutContentTypeface(it)
+            loop_min.setOutContentTypeface(it)
+        }
+
+    }
     private fun setLoopViewShow(loopView: LoopView, show: Boolean) {
         loopView.visibility = if (show) View.VISIBLE else View.GONE
     }
@@ -247,6 +281,7 @@ public class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.s
     }
 
     private fun setLablerUnitColor() {
+        if (mLaberColor == 0) return
         tv_dialog_time_picker_year.setTextColor(mLaberColor)
         tv_dialog_time_picker_month.setTextColor(mLaberColor)
         tv_dialog_time_picker_day.setTextColor(mLaberColor)
@@ -256,6 +291,7 @@ public class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.s
     }
 
     private fun setLablerUnitSize() {
+        if (mLablerSize == 0.0f) return
         tv_dialog_time_picker_year.textSize = mLablerSize
         tv_dialog_time_picker_month.textSize = mLablerSize
         tv_dialog_time_picker_day.textSize = mLablerSize

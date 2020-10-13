@@ -110,7 +110,8 @@ public class LoopView extends View {
 
     private int paddingLeft, paddingRight;
 
-    private Typeface typeface = Typeface.MONOSPACE;
+    private Typeface contenttypeface = Typeface.DEFAULT_BOLD;
+    private Typeface outtypeface = Typeface.DEFAULT;
 
     /**
      * set text line space, must more than 1
@@ -183,8 +184,11 @@ public class LoopView extends View {
      *
      * @param typeface
      */
-    public void setTypeface(Typeface typeface) {
-        this.typeface = typeface;
+    public void setContentTypeface(Typeface typeface) {
+        this.contenttypeface=typeface;
+    }
+    public void setOutContentTypeface(Typeface typeface) {
+        this.outtypeface = typeface;
     }
 
     public LoopView(Context context) {
@@ -251,7 +255,7 @@ public class LoopView extends View {
             paintOuterText = new Paint();
             paintOuterText.setColor(outerTextColor);
             paintOuterText.setAntiAlias(true);
-            paintOuterText.setTypeface(typeface);
+            paintOuterText.setTypeface(outtypeface);
             paintOuterText.setTextSize(textSize);
         }
 
@@ -261,8 +265,8 @@ public class LoopView extends View {
             paintCenterText.setColor(centerTextColor);
             paintCenterText.setAntiAlias(true);
             paintCenterText.setTextScaleX(scaleX);
-            paintCenterText.setTypeface(typeface);
-            paintCenterText.setTextSize(textSize);
+            paintCenterText.setTypeface(contenttypeface);
+            paintCenterText.setTextSize(textSize+2);
         }
 
         if (paintIndicator == null) {
