@@ -34,7 +34,7 @@ abstract class MultipleOptionsDialog(
     var mSelectType: SelectType?,
     var mIsGravityButtom: Boolean,
     var mIsFilter: Boolean
-) : AlertDialog(mContext, R.style.mydialog) {
+) : AlertDialog(mContext, R.style.my_dialog) {
 
 
     private var metrics: DisplayMetrics = context.resources.displayMetrics

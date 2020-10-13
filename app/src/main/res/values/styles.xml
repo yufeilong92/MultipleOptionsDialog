@@ -8,7 +8,7 @@
     </style>
 
     <!--这是对话框-->
-    <style name="mydialog" parent="@android:style/Theme.Dialog">
+    <style name="my_dialog" parent="@android:style/Theme.Dialog">
         <!-- 对话框出现时背景是否变暗 -->
         <item name="android:backgroundDimEnabled">true</item>
         <!-- 对话框背景(重要) -->

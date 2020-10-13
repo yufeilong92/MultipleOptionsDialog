@@ -5,7 +5,6 @@ import android.graphics.Point
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.DisplayMetrics
 import android.view.Gravity
 import android.view.View
@@ -16,7 +15,9 @@ import androidx.appcompat.app.AlertDialog
 import com.example.myapplication.R
 import com.example.myapplication.loopview.loopviewInface.LoopView
 import com.example.myapplication.loopview.loopviewInface.OnItemScrollListener
-import kotlinx.android.synthetic.main.dialog_time_picker.*
+import kotlinx.android.synthetic.main.dialog_date_time_picker.*
+
+import kotlinx.android.synthetic.main.dialog_time_picker.rootviewtimepicek
 import java.lang.NumberFormatException
 import java.util.ArrayList
 
@@ -27,7 +28,7 @@ import java.util.ArrayList
  * @Time :2020/10/12 16:09
  * @Purpose :对话框
  */
-public class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.mydialog) {
+public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.my_dialog) {
     private var metrics: DisplayMetrics = context.resources.displayMetrics
 
     init {
@@ -107,7 +108,7 @@ public class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.s
     }
 
     class Builder(var mContext: Context) {
-        val timePicker = TimePickerDialog(mContext)
+        val timePicker = DateTimePickerDialog(mContext)
 
         fun setStartTime(year: Int): Builder {
             timePicker.mStartYear = year
@@ -202,16 +203,6 @@ public class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.s
             timePicker.mNumber = number
             return this
         }
-        fun setOutTvTypeface(type: Typeface): Builder {
-            timePicker.mOutContentTvTypeface = type
-            return this
-        }
-
-        fun setContentTvTypeface(type: Typeface): Builder {
-            timePicker.mContentTvTypeface = type
-            return this
-        }
-
         fun show() {
             timePicker.show()
         }
@@ -220,7 +211,7 @@ public class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.s
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.dialog_time_picker)
+        setContentView(R.layout.dialog_date_time_picker)
         setSizeMode()
         initEvent()
         initListener()
@@ -269,8 +260,6 @@ public class TimePickerDialog(var mContext: Context) : AlertDialog(mContext, R.s
             loop_hour.setContentTypeface(it)
             loop_min.setContentTypeface(it)
         }
-
-
     }
     private fun setLoopViewShow(loopView: LoopView, show: Boolean) {
         loopView.visibility = if (show) View.VISIBLE else View.GONE

@@ -36,7 +36,7 @@ import kotlinx.android.synthetic.main.dialog_multiple_options.*
  */
 class MultipleOptionsBuildeDialog(
     var mContext: Context
-) : AlertDialog(mContext, R.style.mydialog) {
+) : AlertDialog(mContext, R.style.my_dialog) {
     private lateinit var mData: MutableList<SelectRlv>
     private lateinit var mSelectType: SelectType
     private var mIsGravityButtom: Boolean = false

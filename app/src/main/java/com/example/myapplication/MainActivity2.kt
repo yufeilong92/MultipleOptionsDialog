@@ -4,7 +4,7 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
-import com.example.myapplication.loopview.dialog.TimePickerDialog
+import com.example.myapplication.loopview.dialog.DateTimePickerDialog
 import kotlinx.android.synthetic.main.activity_main2.*
 import java.util.*
 
@@ -19,7 +19,7 @@ class MainActivity2 : AppCompatActivity() {
             val day = mCalendar.get(Calendar.DAY_OF_MONTH)
             val hour=mCalendar.get(Calendar.HOUR_OF_DAY)
             val min=mCalendar.get(Calendar.MINUTE)
-            TimePickerDialog.buidler(this)
+            DateTimePickerDialog.buidler(this)
                 .setStartTime(2016)
                 .setEndTime(2200)
                 .setIsLoop(false)
