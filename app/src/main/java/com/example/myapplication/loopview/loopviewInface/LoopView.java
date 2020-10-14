@@ -133,6 +133,7 @@ public class LoopView extends View {
 
         lineSpace = dp2px(space);
     }
+
     private float density = Resources.getSystem().getDisplayMetrics().density;
 
     /**
@@ -144,6 +145,7 @@ public class LoopView extends View {
     private float dp2px(Float dpValue) {
         return 0.5f + dpValue * density;
     }
+
     /**
      * set outer text color
      *
@@ -337,6 +339,7 @@ public class LoopView extends View {
         }
         mFuture =
                 mExecutor.scheduleWithFixedDelay(new SmoothScrollTimerTask(this, mOffset), 0, 10, TimeUnit.MILLISECONDS);
+        Log.e("---=--", "smoothScroll: 3");
         changeScrollState(SCROLL_STATE_SCROLLING);
     }
 
@@ -346,6 +349,7 @@ public class LoopView extends View {
         int velocityFling = 10;
         mFuture = mExecutor.scheduleWithFixedDelay(new InertiaTimerTask(this, velocityY), 0, velocityFling,
                 TimeUnit.MILLISECONDS);
+        Log.e("---=--", "scrollBy: 2");
         changeScrollState(SCROLL_STATE_DRAGGING);
     }
 
@@ -353,6 +357,7 @@ public class LoopView extends View {
         if (mFuture != null && !mFuture.isCancelled()) {
             mFuture.cancel(true);
             mFuture = null;
+            Log.e("---=--", "cancelFuture: 0");
             changeScrollState(SCROLL_STATE_IDLE);
         }
     }
@@ -381,6 +386,10 @@ public class LoopView extends View {
         if (scrollState != currentScrollState && !handler.hasMessages(MessageHandler.WHAT_SMOOTH_SCROLL_INERTIA)) {
             lastScrollState = currentScrollState;
             currentScrollState = scrollState;
+            Log.e("==", "changeScrollState" + scrollState);
+            if (mOnItemScrollListener != null) {
+                mOnItemScrollListener.onItemScrollStateChanged(this, getSelectedItem(), 0, 0, totalScrollY);
+            }
 //            if(scrollState == SCROLL_STATE_SCROLLING || scrollState == SCROLL_STATE_IDLE){
 //                printMethodStackTrace("changeScrollState");
 //            }
@@ -542,8 +551,8 @@ public class LoopView extends View {
             k1++;
         }
         if (showDividerColor) {
-            canvas.drawLine(paddingLeft+lineSpace, firstLineY, measuredWidth-lineSpace, firstLineY, paintIndicator);
-            canvas.drawLine(paddingLeft+lineSpace, secondLineY, measuredWidth-lineSpace, secondLineY, paintIndicator);
+            canvas.drawLine(paddingLeft + lineSpace, firstLineY, measuredWidth - lineSpace, firstLineY, paintIndicator);
+            canvas.drawLine(paddingLeft + lineSpace, secondLineY, measuredWidth - lineSpace, secondLineY, paintIndicator);
         }
 
         int i = 0;
@@ -597,7 +606,6 @@ public class LoopView extends View {
             if (mOnItemScrollListener != null) {
                 mOnItemScrollListener.onItemScrollStateChanged(this, getSelectedItem(), oldScrollState, currentScrollState, totalScrollY);
             }
-
         }
         if (currentScrollState == SCROLL_STATE_DRAGGING || currentScrollState == SCROLL_STATE_SCROLLING) {
             if (mOnItemScrollListener != null) {

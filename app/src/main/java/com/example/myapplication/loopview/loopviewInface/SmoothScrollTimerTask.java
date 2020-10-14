@@ -4,6 +4,8 @@
 
 package com.example.myapplication.loopview.loopviewInface;
 
+import android.util.Log;
+
 final class SmoothScrollTimerTask implements Runnable {
 
     int realTotalOffset;
@@ -33,6 +35,7 @@ final class SmoothScrollTimerTask implements Runnable {
             }
         }
         if (Math.abs(realTotalOffset) <= 0) {
+            Log.e("==","Math.abs(realTotalOffset) <= 0");
             loopView.cancelFuture();
             loopView.handler.sendEmptyMessage(MessageHandler.WHAT_ITEM_SELECTED);
         } else {
