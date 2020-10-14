@@ -35,8 +35,7 @@ final class SmoothScrollTimerTask implements Runnable {
             }
         }
         if (Math.abs(realTotalOffset) <= 0) {
-            Log.e("==","Math.abs(realTotalOffset) <= 0");
-            loopView.cancelFuture();
+            loopView.cancelFuture(true);
             loopView.handler.sendEmptyMessage(MessageHandler.WHAT_ITEM_SELECTED);
         } else {
             loopView.totalScrollY = loopView.totalScrollY + realOffset;
