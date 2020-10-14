@@ -66,6 +66,7 @@ class MainActivity2 : AppCompatActivity() {
                     .setInitData(list)
                     .setSelectItem(com)
                     .setIsLoop(false)
+                    .setLineSpace(30)
                     .setOnRadioPickerListener { postion, item ->
                         com = item
                     }
