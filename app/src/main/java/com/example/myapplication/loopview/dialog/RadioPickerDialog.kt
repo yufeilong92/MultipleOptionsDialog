@@ -65,7 +65,7 @@ class RadioPickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.m
     private var mContentTvTypeface: Typeface? = null
 
     private var mOutContentTvTypeface: Typeface? = null
-    private var mLineSpace: Int = 0
+    private var mLineSpace: Float = 0.0f
     private lateinit var onRadioPickerListener: (postion: Int, item: String) -> Unit
 
     private var mItemLists: MutableList<String>? = null
@@ -99,7 +99,7 @@ class RadioPickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.m
             mRadioPicker.mLineColor = color
             return this
         }
-        fun setLineSpace(space: Int): Builder {
+        fun setLineSpace(space: Float): Builder {
             mRadioPicker.mLineSpace = space
             return this
         }
@@ -165,7 +165,7 @@ class RadioPickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.m
         setIsLoop()
     }
     private fun setLineSpace() {
-        if (mLineSpace == 0) return
+        if (mLineSpace == 0.0f) return
         loop_item_view.setLineSpace(mLineSpace)
     }
     private fun setLoopNumber() {

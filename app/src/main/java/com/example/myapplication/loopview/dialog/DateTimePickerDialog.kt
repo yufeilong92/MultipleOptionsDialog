@@ -100,7 +100,7 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
     private var mLinkageDay: String? = null
     private var mLinkageHour: String? = null
     private var mLinkageMin: String? = null
-    private var mLineSpace: Int = 0
+    private var mLineSpace: Float = 0.0f
 
     companion object {
         fun buidler(mContext: Context): Builder {
@@ -149,7 +149,7 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
             timePicker.mContentColor = color
             return this
         }
-        fun setLineSpace(space: Int): Builder {
+        fun setLineSpace(space: Float): Builder {
             timePicker.mLineSpace = space
             return this
         }
@@ -255,7 +255,7 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
         initLinkAge()
     }
     private fun setLineSpace() {
-        if (mLineSpace == 0) return
+        if (mLineSpace == 0.0f) return
         loop_year.setLineSpace(mLineSpace)
         loop_month.setLineSpace(mLineSpace)
         loop_day.setLineSpace(mLineSpace)

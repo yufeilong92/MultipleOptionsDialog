@@ -79,7 +79,7 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
     private var mLinkageHour: String? = null
     private var mLinkageMin: String? = null
 
-    private var mLineSpace: Int = 0
+    private var mLineSpace: Float = 0.0f
 
     private var mContentTvTypeface: Typeface? = null
 
@@ -158,7 +158,7 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
             return this
         }
 
-        fun setLineSpace(space: Int): Builder {
+        fun setLineSpace(space: Float): Builder {
             timePicker.mLineSpace = space
             return this
         }
@@ -196,7 +196,7 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
     }
 
     private fun setLineSpace() {
-        if (mLineSpace == 0) return
+        if (mLineSpace == 0.0f) return
         loop_h_hour.setLineSpace(mLineSpace)
         loop_h_min.setLineSpace(mLineSpace)
     }
