@@ -6,6 +6,7 @@ import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.Gravity
 import android.view.WindowManager
 import android.widget.Toast
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AlertDialog
 import com.example.myapplication.R
 import com.example.myapplication.loopview.loopviewInface.LoopView
 import com.example.myapplication.loopview.loopviewInface.OnItemScrollListener
+import com.example.myapplication.loopview.loopviewInface.OnItemSelectListener
 import kotlinx.android.synthetic.main.dialog_date_time_picker.*
 import kotlinx.android.synthetic.main.dialog_radio_picker.*
 import kotlinx.android.synthetic.main.dialog_time_picker.*
@@ -99,10 +101,12 @@ class RadioPickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.m
             mRadioPicker.mLineColor = color
             return this
         }
+
         fun setLineSpace(space: Float): Builder {
             mRadioPicker.mLineSpace = space
             return this
         }
+
         fun setViewPhoneHeightPercentage(mPercentage: Double): Builder {
             mRadioPicker.mPercentage = mPercentage
             return this
@@ -164,10 +168,12 @@ class RadioPickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.m
         setShowline()
         setIsLoop()
     }
+
     private fun setLineSpace() {
         if (mLineSpace == 0.0f) return
         loop_item_view.setLineSpace(mLineSpace)
     }
+
     private fun setLoopNumber() {
         if (mNumber == 0) return
         loop_item_view.setItemsVisibleCount(mNumber)
@@ -190,32 +196,14 @@ class RadioPickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.m
         }
         loop_item_view.setItems(mItemLists)
         loop_item_view.setInitPosition(postion)
-        loop_item_view.setOnItemScrollListener(object : OnItemScrollListener {
-            override fun onItemScrollStateChanged(
-                    loopView: LoopView?,
-                    currentPassItem: Int,
-                    oldScrollState: Int,
-                    scrollState: Int,
-                    totalScrollY: Int
-            ) {
-                //滑动停止
-                if (scrollState == LoopView.SCROLL_STATE_IDLE) {
-                    val selectedItem = loop_item_view.selectedItem
-                    tv_dialog_radio_picker_time.text = mItemLists!![selectedItem]
-                }
-            }
-
-            override fun onItemScrolling(
-                    loopView: LoopView?,
-                    currentPassItem: Int,
-                    scrollState: Int,
-                    totalScrollY: Int
-            ) {
+        loop_item_view.setOnItemSelectStopListener(object : OnItemSelectListener {
+            override fun onItemScrollStateChanged(loopView: LoopView?, currentPassItem: Int) {
+                Log.e("==", "触发radio")
+                val selectedItem = loop_item_view.selectedItem
+                tv_dialog_radio_picker_time.text = mItemLists!![selectedItem]
             }
 
         })
-
-
     }
 
     private fun setTvTypeface() {
@@ -230,12 +218,12 @@ class RadioPickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.m
     }
 
     private fun setContentColor() {
-        if (mContentColor==0)return
+        if (mContentColor == 0) return
         loop_item_view.setCenterTextColor(mContentColor)
     }
 
     private fun setOutContentColor() {
-        if (mOutContentColor==0)return
+        if (mOutContentColor == 0) return
         loop_item_view.setOuterTextColor(mOutContentColor)
     }
 
@@ -244,7 +232,7 @@ class RadioPickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.m
     }
 
     private fun setShowline() {
-        if (mLineColor==0)return
+        if (mLineColor == 0) return
         loop_item_view.setDividerColor(mLineColor)
     }
 
