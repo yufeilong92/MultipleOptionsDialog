@@ -35,6 +35,7 @@ final class SmoothScrollTimerTask implements Runnable {
             }
         }
         if (Math.abs(realTotalOffset) <= 0) {
+            Log.e("==","触发监听1");
             loopView.cancelFuture(true);
             loopView.handler.sendEmptyMessage(MessageHandler.WHAT_ITEM_SELECTED);
         } else {

@@ -5,6 +5,8 @@ import android.graphics.Point
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Gravity
@@ -13,11 +15,8 @@ import androidx.annotation.ColorInt
 import androidx.appcompat.app.AlertDialog
 import com.example.myapplication.R
 import com.example.myapplication.loopview.loopviewInface.LoopView
-import com.example.myapplication.loopview.loopviewInface.OnItemScrollListener
-import com.example.myapplication.loopview.loopviewInface.OnItemSelectListener
-import kotlinx.android.synthetic.main.dialog_date_time_picker.*
+import com.example.myapplication.loopview.loopviewInface.OnStopListener
 import kotlinx.android.synthetic.main.dialog_time_picker.*
-import java.lang.NumberFormatException
 import java.util.ArrayList
 
 /**
@@ -299,6 +298,14 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
         }
     }
 
+    val handler: Handler = object : Handler() {
+        override fun handleMessage(msg: Message) {
+            bindViewData()
+            if (mIsLinkAge)
+                setIsLinkage(msg.arg1)
+        }
+    }
+
     /***
      *
      * @param type 0 年 1 月 2 天 3 时 4 分
@@ -352,13 +359,9 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
             }
         }
         loopView.setInitPosition(postion)
-        loopView.setOnItemSelectStopListener(object : OnItemSelectListener {
-            override fun onItemScrollStateChanged(loopView: LoopView?, currentPassItem: Int) {
-                //滑动停止
-                Log.e("==", "触发time")
-                bindViewData()
-                if (mIsLinkAge)
-                    setIsLinkage(type)
+        loopView.setOnStopListener(object : OnStopListener {
+            override fun onStopChanged(loopView: LoopView?, currentPassItem: Int) {
+                handler.sendMessage(Message().apply { arg1 = type })
             }
 
         })

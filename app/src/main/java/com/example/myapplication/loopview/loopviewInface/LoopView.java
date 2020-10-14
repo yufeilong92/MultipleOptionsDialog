@@ -57,7 +57,7 @@ public class LoopView extends View {
     OnItemSelectedListener onItemSelectedListener;
     OnItemScrollListener mOnItemScrollListener;
 
-    OnItemSelectListener mOnSelectSotpListener;
+    OnStopListener mOnStopListener;
 
     // Timer mTimer;
     ScheduledExecutorService mExecutor = Executors.newSingleThreadScheduledExecutor();
@@ -391,12 +391,13 @@ public class LoopView extends View {
             if (stop&&(scrollState == SCROLL_STATE_SCROLLING || scrollState == SCROLL_STATE_IDLE)) {
 //                printMethodStackTrace("changeScrollState");
                 Log.e("==", "scrollState触发处3");
-                if (mOnSelectSotpListener != null) {
-                    mOnSelectSotpListener.onItemScrollStateChanged(this, getSelectedItem());
+                if (mOnStopListener != null) {
+                    mOnStopListener.onStopChanged(this, getSelectedItem());
                 }
             }
         }
     }
+
 
     /**
      * set not loop
@@ -441,11 +442,9 @@ public class LoopView extends View {
         this.mOnItemScrollListener = mOnItemScrollListener;
     }
 
-    public final void setOnItemSelectStopListener(OnItemSelectListener mOnItemScrollListener) {
-        this.mOnSelectSotpListener = mOnItemScrollListener;
+    public final void setOnStopListener(OnStopListener mOnItemScrollListener) {
+        this.mOnStopListener = mOnItemScrollListener;
     }
-
-
 
 
     public final void setItems(List<String> items) {

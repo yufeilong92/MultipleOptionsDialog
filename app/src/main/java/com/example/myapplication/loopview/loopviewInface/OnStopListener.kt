@@ -7,6 +7,6 @@ package com.example.myapplication.loopview.loopviewInface
  * @Time :2020/10/14 14:30
  * @Purpose :
  */
-public interface OnItemSelectListener {
-    fun onItemScrollStateChanged(loopView: LoopView?, currentPassItem: Int)
+public interface OnStopListener {
+    fun onStopChanged(loopView: LoopView?, currentPassItem: Int)
 }

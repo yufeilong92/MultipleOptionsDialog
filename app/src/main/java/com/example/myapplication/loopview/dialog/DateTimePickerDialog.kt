@@ -5,6 +5,8 @@ import android.graphics.Point
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Gravity
@@ -16,7 +18,7 @@ import androidx.appcompat.app.AlertDialog
 import com.example.myapplication.R
 import com.example.myapplication.loopview.loopviewInface.LoopView
 import com.example.myapplication.loopview.loopviewInface.OnItemScrollListener
-import com.example.myapplication.loopview.loopviewInface.OnItemSelectListener
+import com.example.myapplication.loopview.loopviewInface.OnStopListener
 import kotlinx.android.synthetic.main.dialog_date_time_picker.*
 import kotlinx.android.synthetic.main.dialog_radio_picker.*
 
@@ -151,10 +153,12 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
             timePicker.mContentColor = color
             return this
         }
+
         fun setLineSpace(space: Float): Builder {
             timePicker.mLineSpace = space
             return this
         }
+
         fun setSelectOutColor(@ColorInt color: Int): Builder {
             timePicker.mOutContentColor = color
             return this
@@ -204,6 +208,7 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
             timePicker.onSelectTImePickerHourMin = onSelectTImePickerHourMin
             return this
         }
+
         fun setOutTvTypeface(type: Typeface): Builder {
             timePicker.mOutContentTvTypeface = type
             return this
@@ -213,10 +218,12 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
             timePicker.mContentTvTypeface = type
             return this
         }
+
         fun setShowNumber(number: Int): Builder {
             timePicker.mNumber = number
             return this
         }
+
         fun show() {
             timePicker.show()
         }
@@ -256,6 +263,7 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
         setIsLoop()
         initLinkAge()
     }
+
     private fun setLineSpace() {
         if (mLineSpace == 0.0f) return
         loop_year.setLineSpace(mLineSpace)
@@ -285,6 +293,7 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
             loop_min.setContentTypeface(it)
         }
     }
+
     private fun setLoopViewShow(loopView: LoopView, show: Boolean) {
         loopView.visibility = if (show) View.VISIBLE else View.GONE
     }
@@ -418,11 +427,11 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
             if (::onSelectTImePickerHourMin.isInitialized) {
 
                 onSelectTImePickerHourMin(
-                    mYearList!![selectedItem],
-                    mMonthList!![selectedItem1],
-                    mDayList!![selectedItem2],
-                    mHourList!![selectedItem3],
-                    mMinuteList!![selectedItem4]
+                        mYearList!![selectedItem],
+                        mMonthList!![selectedItem1],
+                        mDayList!![selectedItem2],
+                        mHourList!![selectedItem3],
+                        mMinuteList!![selectedItem4]
                 )
                 dismiss()
             }
@@ -432,9 +441,9 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
                 return
             if (::onSelectTImePickerNoHourMin.isInitialized) {
                 onSelectTImePickerNoHourMin(
-                    mYearList!![selectedItem],
-                    mMonthList!![selectedItem1],
-                    mDayList!![selectedItem2]
+                        mYearList!![selectedItem],
+                        mMonthList!![selectedItem1],
+                        mDayList!![selectedItem2]
                 )
                 dismiss()
             }
@@ -443,6 +452,13 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
 
     }
 
+    val handler: Handler = object : Handler() {
+        override fun handleMessage(msg: Message) {
+            bindViewData()
+            if (mIsLinkAge)
+                setIsLinkage(msg.arg1)
+        }
+    }
 
     /***
      *
@@ -557,12 +573,11 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
             }
         }
         loopView.setInitPosition(postion)
-        loopView.setOnItemSelectStopListener(object :OnItemSelectListener{
-            override fun onItemScrollStateChanged(loopView: LoopView?, currentPassItem: Int) {
-                Log.e("==","触发date")
-                bindViewData()
-                if (mIsLinkAge)
-                    setIsLinkage(type)
+        loopView.setOnStopListener(object : OnStopListener {
+            override fun onStopChanged(loopView: LoopView?, currentPassItem: Int) {
+                handler.sendMessage(Message().apply {
+                    arg1 = type
+                })
             }
 
         })
@@ -578,7 +593,7 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
                 val selectedItem = loop_year.selectedItem
                 val com = mYearList!![selectedItem]
                 if (com != mLinkageYear) {
-                    mLinkageYear=com
+                    mLinkageYear = com
                     setCustiomPostion(0, true, 0, true, 0, true, 0, true)
                 }
             }
@@ -586,7 +601,7 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
                 val selectedItem = loop_month.selectedItem
                 val com = mMonthList!![selectedItem]
                 if (com != mLinkageMonth) {
-                    mLinkageMonth=com
+                    mLinkageMonth = com
                     setCustiomPostion(0, false, 0, true, 0, true, 0, true)
                 }
 
@@ -595,7 +610,7 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
                 val selectedItem = loop_day.selectedItem
                 val com = mDayList!![selectedItem]
                 if (com != mLinkageDay) {
-                    mLinkageDay=com
+                    mLinkageDay = com
                     setCustiomPostion(0, false, 0, false, 0, true, 0, true)
                 }
             }
@@ -603,7 +618,7 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
                 val selectedItem = loop_hour.selectedItem
                 val com = mHourList!![selectedItem]
                 if (com != mLinkageHour) {
-                    mLinkageHour=com
+                    mLinkageHour = com
                     setCustiomPostion(0, false, 0, false, 0, false, 0, true)
                 }
             }
@@ -623,14 +638,14 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
      * @return
      */
     private fun setCustiomPostion(
-        month: Int,
-        isChangerMonth: Boolean,
-        day: Int,
-        isChangerDay: Boolean,
-        hour: Int,
-        isChangerHour: Boolean,
-        min: Int,
-        isChangerMin: Boolean
+            month: Int,
+            isChangerMonth: Boolean,
+            day: Int,
+            isChangerDay: Boolean,
+            hour: Int,
+            isChangerHour: Boolean,
+            min: Int,
+            isChangerMin: Boolean
     ) {
         if (isChangerMonth)
             loop_month.setCurrentPosition(month)
@@ -653,13 +668,13 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
             val selectedItem3 = loop_hour.selectedItem
             val selectedItem4 = loop_min.selectedItem
             tv_dialog_time_picker_time.text =
-                "${mYearList!![selectedItem]}-${mMonthList!![selectedItem1]}-${mDayList!![selectedItem2]}  ${mHourList!![selectedItem3]}:${mMinuteList!![selectedItem4]}"
+                    "${mYearList!![selectedItem]}-${mMonthList!![selectedItem1]}-${mDayList!![selectedItem2]}  ${mHourList!![selectedItem3]}:${mMinuteList!![selectedItem4]}"
 
         } else {
             if (mYearList.isNullOrEmpty() || mMonthList.isNullOrEmpty() || mDayList.isNullOrEmpty())
                 return
             tv_dialog_time_picker_time.text =
-                "${mYearList!![selectedItem]}-${mMonthList!![selectedItem1]}-${mDayList!![selectedItem2]}"
+                    "${mYearList!![selectedItem]}-${mMonthList!![selectedItem1]}-${mDayList!![selectedItem2]}"
         }
     }
 
@@ -678,11 +693,11 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
         loop_year.setInitPosition(0)
         loop_year.setOnItemScrollListener(object : OnItemScrollListener {
             override fun onItemScrollStateChanged(
-                loopView: LoopView?,
-                currentPassItem: Int,
-                oldScrollState: Int,
-                scrollState: Int,
-                totalScrollY: Int
+                    loopView: LoopView?,
+                    currentPassItem: Int,
+                    oldScrollState: Int,
+                    scrollState: Int,
+                    totalScrollY: Int
             ) {
 
                 if (scrollState == LoopView.SCROLL_STATE_IDLE) {
@@ -695,10 +710,10 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
             }
 
             override fun onItemScrolling(
-                loopView: LoopView?,
-                currentPassItem: Int,
-                scrollState: Int,
-                totalScrollY: Int
+                    loopView: LoopView?,
+                    currentPassItem: Int,
+                    scrollState: Int,
+                    totalScrollY: Int
             ) {
             }
 
@@ -718,11 +733,11 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
         loop_month.setInitPosition(0)
         loop_month.setOnItemScrollListener(object : OnItemScrollListener {
             override fun onItemScrollStateChanged(
-                loopView: LoopView?,
-                currentPassItem: Int,
-                oldScrollState: Int,
-                scrollState: Int,
-                totalScrollY: Int
+                    loopView: LoopView?,
+                    currentPassItem: Int,
+                    oldScrollState: Int,
+                    scrollState: Int,
+                    totalScrollY: Int
             ) {
                 if (scrollState == LoopView.SCROLL_STATE_IDLE) {
                     bindViewData()
@@ -730,10 +745,10 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
             }
 
             override fun onItemScrolling(
-                loopView: LoopView?,
-                currentPassItem: Int,
-                scrollState: Int,
-                totalScrollY: Int
+                    loopView: LoopView?,
+                    currentPassItem: Int,
+                    scrollState: Int,
+                    totalScrollY: Int
             ) {
             }
 
@@ -752,11 +767,11 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
         loop_day.setInitPosition(0)
         loop_day.setOnItemScrollListener(object : OnItemScrollListener {
             override fun onItemScrollStateChanged(
-                loopView: LoopView?,
-                currentPassItem: Int,
-                oldScrollState: Int,
-                scrollState: Int,
-                totalScrollY: Int
+                    loopView: LoopView?,
+                    currentPassItem: Int,
+                    oldScrollState: Int,
+                    scrollState: Int,
+                    totalScrollY: Int
             ) {
                 if (scrollState == LoopView.SCROLL_STATE_IDLE) {
                     bindViewData()
@@ -764,10 +779,10 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
             }
 
             override fun onItemScrolling(
-                loopView: LoopView?,
-                currentPassItem: Int,
-                scrollState: Int,
-                totalScrollY: Int
+                    loopView: LoopView?,
+                    currentPassItem: Int,
+                    scrollState: Int,
+                    totalScrollY: Int
             ) {
             }
 
@@ -788,11 +803,11 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
         loop_hour.setInitPosition(0)
         loop_hour.setOnItemScrollListener(object : OnItemScrollListener {
             override fun onItemScrollStateChanged(
-                loopView: LoopView?,
-                currentPassItem: Int,
-                oldScrollState: Int,
-                scrollState: Int,
-                totalScrollY: Int
+                    loopView: LoopView?,
+                    currentPassItem: Int,
+                    oldScrollState: Int,
+                    scrollState: Int,
+                    totalScrollY: Int
             ) {
                 if (scrollState == LoopView.SCROLL_STATE_IDLE) {
                     bindViewData()
@@ -800,10 +815,10 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
             }
 
             override fun onItemScrolling(
-                loopView: LoopView?,
-                currentPassItem: Int,
-                scrollState: Int,
-                totalScrollY: Int
+                    loopView: LoopView?,
+                    currentPassItem: Int,
+                    scrollState: Int,
+                    totalScrollY: Int
             ) {
             }
 
@@ -822,11 +837,11 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
         loop_min.setInitPosition(0)
         loop_min.setOnItemScrollListener(object : OnItemScrollListener {
             override fun onItemScrollStateChanged(
-                loopView: LoopView?,
-                currentPassItem: Int,
-                oldScrollState: Int,
-                scrollState: Int,
-                totalScrollY: Int
+                    loopView: LoopView?,
+                    currentPassItem: Int,
+                    oldScrollState: Int,
+                    scrollState: Int,
+                    totalScrollY: Int
             ) {
                 if (scrollState == LoopView.SCROLL_STATE_IDLE) {
                     bindViewData()
@@ -834,10 +849,10 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
             }
 
             override fun onItemScrolling(
-                loopView: LoopView?,
-                currentPassItem: Int,
-                scrollState: Int,
-                totalScrollY: Int
+                    loopView: LoopView?,
+                    currentPassItem: Int,
+                    scrollState: Int,
+                    totalScrollY: Int
             ) {
             }
 
@@ -865,6 +880,7 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
         layoutParams.height = (height * mPercentage).toInt()
         rootviewtimepicek.layoutParams = layoutParams
     }
+
     private fun fillZero(number: Int): String {
         return if (number < 10) "0$number" else "" + number
     }

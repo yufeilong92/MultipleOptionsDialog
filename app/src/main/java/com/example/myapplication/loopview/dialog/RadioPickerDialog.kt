@@ -5,6 +5,8 @@ import android.graphics.Point
 import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Message
 import android.util.DisplayMetrics
 import android.util.Log
 import android.view.Gravity
@@ -14,11 +16,8 @@ import androidx.annotation.ColorInt
 import androidx.appcompat.app.AlertDialog
 import com.example.myapplication.R
 import com.example.myapplication.loopview.loopviewInface.LoopView
-import com.example.myapplication.loopview.loopviewInface.OnItemScrollListener
-import com.example.myapplication.loopview.loopviewInface.OnItemSelectListener
-import kotlinx.android.synthetic.main.dialog_date_time_picker.*
+import com.example.myapplication.loopview.loopviewInface.OnStopListener
 import kotlinx.android.synthetic.main.dialog_radio_picker.*
-import kotlinx.android.synthetic.main.dialog_time_picker.*
 
 /**
  * @Author : YFL  is Creating a porject in My Application
@@ -147,7 +146,11 @@ class RadioPickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.m
         }
 
     }
-
+    val handler:Handler=object :Handler(){
+        override fun handleMessage(msg: Message) {
+            tv_dialog_radio_picker_time.text = msg.obj.toString()
+        }
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.dialog_radio_picker)
@@ -196,15 +199,20 @@ class RadioPickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.m
         }
         loop_item_view.setItems(mItemLists)
         loop_item_view.setInitPosition(postion)
-        loop_item_view.setOnItemSelectStopListener(object : OnItemSelectListener {
-            override fun onItemScrollStateChanged(loopView: LoopView?, currentPassItem: Int) {
-                Log.e("==", "触发radio")
+        loop_item_view.setOnStopListener(object : OnStopListener {
+            override fun onStopChanged(loopView: LoopView?, currentPassItem: Int) {
+                Log.e("==","onstop")
                 val selectedItem = loop_item_view.selectedItem
-                tv_dialog_radio_picker_time.text = mItemLists!![selectedItem]
+                val com = mItemLists!![selectedItem]
+                handler.sendMessage(Message().apply {
+                    obj=com
+                })
             }
-
         })
+
     }
+
+
 
     private fun setTvTypeface() {
         mOutContentTvTypeface?.let {
