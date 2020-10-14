@@ -16,6 +16,7 @@ import com.example.myapplication.loopview.loopviewInface.LoopView
 import com.example.myapplication.loopview.loopviewInface.OnItemScrollListener
 import kotlinx.android.synthetic.main.dialog_date_time_picker.*
 import kotlinx.android.synthetic.main.dialog_radio_picker.*
+import kotlinx.android.synthetic.main.dialog_time_picker.*
 
 /**
  * @Author : YFL  is Creating a porject in My Application
@@ -64,7 +65,7 @@ class RadioPickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.m
     private var mContentTvTypeface: Typeface? = null
 
     private var mOutContentTvTypeface: Typeface? = null
-
+    private var mLineSpace: Int = 0
     private lateinit var onRadioPickerListener: (postion: Int, item: String) -> Unit
 
     private var mItemLists: MutableList<String>? = null
@@ -98,7 +99,10 @@ class RadioPickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.m
             mRadioPicker.mLineColor = color
             return this
         }
-
+        fun setLineSpace(space: Int): Builder {
+            mRadioPicker.mLineSpace = space
+            return this
+        }
         fun setViewPhoneHeightPercentage(mPercentage: Double): Builder {
             mRadioPicker.mPercentage = mPercentage
             return this
@@ -151,6 +155,7 @@ class RadioPickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.m
     private fun initEvent() {
         tv_dialog_radio_picker_time.text = "请选择"
         setLoopNumber()
+        setLineSpace()
         bindViewData()
         setTvTypeface()
         setContentColor()
@@ -159,7 +164,10 @@ class RadioPickerDialog(var mContext: Context) : AlertDialog(mContext, R.style.m
         setShowline()
         setIsLoop()
     }
-
+    private fun setLineSpace() {
+        if (mLineSpace == 0) return
+        loop_item_view.setLineSpace(mLineSpace)
+    }
     private fun setLoopNumber() {
         if (mNumber == 0) return
         loop_item_view.setItemsVisibleCount(mNumber)

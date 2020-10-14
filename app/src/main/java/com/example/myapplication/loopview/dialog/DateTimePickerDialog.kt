@@ -16,6 +16,7 @@ import com.example.myapplication.R
 import com.example.myapplication.loopview.loopviewInface.LoopView
 import com.example.myapplication.loopview.loopviewInface.OnItemScrollListener
 import kotlinx.android.synthetic.main.dialog_date_time_picker.*
+import kotlinx.android.synthetic.main.dialog_radio_picker.*
 
 import java.lang.NumberFormatException
 import java.util.ArrayList
@@ -99,6 +100,7 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
     private var mLinkageDay: String? = null
     private var mLinkageHour: String? = null
     private var mLinkageMin: String? = null
+    private var mLineSpace: Int = 0
 
     companion object {
         fun buidler(mContext: Context): Builder {
@@ -147,7 +149,10 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
             timePicker.mContentColor = color
             return this
         }
-
+        fun setLineSpace(space: Int): Builder {
+            timePicker.mLineSpace = space
+            return this
+        }
         fun setSelectOutColor(@ColorInt color: Int): Builder {
             timePicker.mOutContentColor = color
             return this
@@ -227,6 +232,7 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
     private fun initEvent() {
         tv_dialog_time_picker_time.text = "请选择"
         setLoopNumber()
+        setLineSpace()
         gmSetViewData(0, loop_year, mSelectYear)
         gmSetViewData(1, loop_month, mSelectMonth)
         gmSetViewData(2, loop_day, mSelectDay)
@@ -247,6 +253,15 @@ public class DateTimePickerDialog(var mContext: Context) : AlertDialog(mContext,
         setShowline()
         setIsLoop()
         initLinkAge()
+    }
+    private fun setLineSpace() {
+        if (mLineSpace == 0) return
+        loop_year.setLineSpace(mLineSpace)
+        loop_month.setLineSpace(mLineSpace)
+        loop_day.setLineSpace(mLineSpace)
+        if (!isShowHourMin) return
+        loop_hour.setLineSpace(mLineSpace)
+        loop_min.setLineSpace(mLineSpace)
     }
 
     private fun setTvTypeface() {

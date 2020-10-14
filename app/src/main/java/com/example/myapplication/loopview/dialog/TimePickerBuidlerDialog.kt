@@ -66,8 +66,10 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
 
     //线颜色
     private var mLineColor: Int = 0
+
     //是否显示线
     private var isShowLine: Boolean = true
+
     //是否循环
     private var isLoop: Boolean = true
 
@@ -76,6 +78,8 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
 
     private var mLinkageHour: String? = null
     private var mLinkageMin: String? = null
+
+    private var mLineSpace: Int = 0
 
     private var mContentTvTypeface: Typeface? = null
 
@@ -133,10 +137,12 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
             timePicker.onSelectTImePickerNoHourMin = onSelectTImePickerHourMin
             return this
         }
+
         fun showLine(show: Boolean): Builder {
             timePicker.isShowLine = show
             return this
         }
+
         fun setOutTvTypeface(type: Typeface): Builder {
             timePicker.mOutContentTvTypeface = type
             return this
@@ -146,8 +152,14 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
             timePicker.mContentTvTypeface = type
             return this
         }
+
         fun setShowNumber(number: Int): Builder {
             timePicker.mNumber = number
+            return this
+        }
+
+        fun setLineSpace(space: Int): Builder {
+            timePicker.mLineSpace = space
             return this
         }
 
@@ -169,10 +181,10 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
     private fun initEvent() {
         tv_dialog_time_picker_h_time.text = "请选择"
         setLoopNumber()
+        setLineSpace()
         gmSetViewData(3, loop_h_hour, mSelectHour)
         gmSetViewData(4, loop_h_min, mSelectMin)
         setTvTypeface()
-
         setContentColor()
         setOutContentColor()
         setLineColor()
@@ -182,15 +194,24 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
         setIsLoop()
         initLinkAge()
     }
+
+    private fun setLineSpace() {
+        if (mLineSpace == 0) return
+        loop_h_hour.setLineSpace(mLineSpace)
+        loop_h_min.setLineSpace(mLineSpace)
+    }
+
     private fun setShowline() {
         loop_h_hour.setShowDividerLine(isShowLine)
         loop_h_min.setShowDividerLine(isShowLine)
     }
+
     private fun setLoopNumber() {
         if (mNumber == 0) return
         loop_h_hour.setItemsVisibleCount(mNumber)
         loop_h_min.setItemsVisibleCount(mNumber)
     }
+
     private fun setTvTypeface() {
         mOutContentTvTypeface?.let {
 
@@ -230,6 +251,7 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
         loop_h_hour.setOuterTextColor(mOutContentColor)
         loop_h_min.setOuterTextColor(mOutContentColor)
     }
+
     private fun setLineColor() {
         if (mLineColor == 0) return
         loop_h_hour.setDividerColor(mLineColor)
@@ -374,7 +396,7 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
                 val selectedItem = loop_h_hour.selectedItem
                 val com = mHourList!![selectedItem]
                 if (com != mLinkageHour) {
-                    mLinkageHour=com
+                    mLinkageHour = com
                     setCustiomPostion(0, true)
                 }
             }
@@ -423,6 +445,7 @@ class TimePickerBuidlerDialog(var mContext: Context) : AlertDialog(mContext, R.s
         layoutParams.height = (height * mPercentage).toInt()
         rootviewtimepicek_h.layoutParams = layoutParams
     }
+
     private fun fillZero(number: Int): String {
         return if (number < 10) "0$number" else "" + number
     }

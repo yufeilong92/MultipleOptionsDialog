@@ -112,6 +112,8 @@ public class LoopView extends View {
 
     private Typeface contenttypeface = Typeface.DEFAULT_BOLD;
     private Typeface outtypeface = Typeface.DEFAULT;
+    //线的左右间距
+    int lineSpace = 0;
 
     /**
      * set text line space, must more than 1
@@ -122,6 +124,13 @@ public class LoopView extends View {
         if (lineSpacingMultiplier > 1.0f) {
             this.lineSpacingMultiplier = lineSpacingMultiplier;
         }
+    }
+
+    /**
+     * @param space 线的左右间距
+     */
+    public void setLineSpace(Integer space) {
+        lineSpace = space;
     }
 
     /**
@@ -522,8 +531,8 @@ public class LoopView extends View {
             k1++;
         }
         if (showDividerColor) {
-            canvas.drawLine(paddingLeft, firstLineY, measuredWidth, firstLineY, paintIndicator);
-            canvas.drawLine(paddingLeft, secondLineY, measuredWidth, secondLineY, paintIndicator);
+            canvas.drawLine(paddingLeft+lineSpace, firstLineY, measuredWidth-lineSpace, firstLineY, paintIndicator);
+            canvas.drawLine(paddingLeft+lineSpace, secondLineY, measuredWidth-lineSpace, secondLineY, paintIndicator);
         }
 
         int i = 0;

@@ -58,21 +58,21 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
         <View
+            android:visibility="gone"
             android:layout_width="wrap_content"
-            android:layout_weight="1"
             android:layout_height="wrap_content"/>
         <com.example.myapplication.loopview.loopviewInface.LoopView
             android:id="@+id/loop_item_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             app:awv_centerTextColor="#1E90FF"
+            app:awv_scaleX="30"
             app:awv_dividerTextColor="#87CEFA"
             app:awv_isLoop="false"
             app:awv_textsize="13" />
         <View
+            android:visibility="gone"
             android:layout_width="wrap_content"
-            android:layout_weight="1"
             android:layout_height="wrap_content"/>
     </LinearLayout>
 
