@@ -144,13 +144,13 @@ public class WheelView extends View {
 
 
         if (attrs != null) {
-            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.LoopView, 0, 0);
+            TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.WheelView, 0, 0);
             mGravity = a.getInt(R.styleable.LoopView_view_gravity, Gravity.CENTER);
-            textColorOut = a.getColor(R.styleable.LoopView_topBottomTextColor, textColorOut);
-            textColorCenter = a.getColor(R.styleable.LoopView_centerTextColor, textColorCenter);
-            dividerColor = a.getColor(R.styleable.LoopView_lineColor, dividerColor);
-            textSize = a.getDimensionPixelOffset(R.styleable.LoopView_textSize, textSize);
-            lineSpacingMultiplier = a.getFloat(R.styleable.LoopView_lineSpacingMultiplier, lineSpacingMultiplier);
+            textColorOut = a.getColor(R.styleable.WheelView_topBottomTextColor, textColorOut);
+            textColorCenter = a.getColor(R.styleable.WheelView_centerTextColor, textColorCenter);
+            dividerColor = a.getColor(R.styleable.WheelView_lineColor, dividerColor);
+            textSize = a.getDimensionPixelOffset(R.styleable.WheelView_textSize, textSize);
+            lineSpacingMultiplier = a.getFloat(R.styleable.WheelView_lineSpacingMultiplier, lineSpacingMultiplier);
             a.recycle();//回收内存
         }
 
